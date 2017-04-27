@@ -1,0 +1,71 @@
+XML Based - Hibernate
+
+Topics to study:
+-Basic Concepts
+-XML Based Configuration
+-Database Properties
+-SQL/HQL
+-DAOs
+
+Exercise 5
+Objective: Learn how to use and set-up hibernate as an object-relational mapping tool. 
+Description: Create a employee registration system using hibernate as an ORM tool.
+
+Pre-requirements
+Install PostgreSQL 9.4
+Must use Hibernate 4.x
+
+Project Structure
+
+app
+core
+  model
+  service
+  dao
+infra
+  persistence
+  buildtools
+utilities(optional)
+
+App module - user - UI Interface
+Core module - model (POJOs), service (business rules, data processing, etc.), dao (application - databse interaction)
+Infra module - persistence (configurations of database connection), buildtools (sql files, yyyymmdd_seqNo.sql format)
+Utility - utility classes, must be set as a dependency to module/s
+
+Requirements
+
+Create an application that can perform CRUD operations for Employee entity
+
+Employee must have these information:
+-Id
+-Name (last name, first name, middle name, suffix, title)
+-Address (street no, barangay, municipality/city, zipcode)
+-Birthday
+-Grade Weighted Average (GWA)
+-Date hired
+-Currently Employed
+-Contact Information (landline, mobile number, email)
+-Roles (employee can have any number of roles) (ex: admin, dev, qa, ba, etc)
+
+Functionalities
+
+Employee Management
+-Create Employee
+-Delete Employee
+-Update Employee
+-List Employee (by GWA (must be done through Java), by Date Hired, by Last Name)
+-Add Employee Role
+-Remove Employee Role
+
+Contact Info Management
+-Add Contact
+-Update Contact
+-Delete Contact
+-List Contact
+
+Role Management
+-Add Role
+-Update Role
+-Delete Role
+-List Role
+
