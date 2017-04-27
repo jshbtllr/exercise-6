@@ -1,4 +1,4 @@
-package com.exercise6.model
+package com.exercise6.model;
 
 public class FullName {
 
@@ -9,8 +9,8 @@ public class FullName {
 	private String suffix;
 	private String title;
 
-	public Name() {}
-	public Name(String firstName, String lastName, String middleName, String suffix, String title) {
+	public FullName() {}
+	public FullName(String firstName, String lastName, String middleName, String suffix, String title) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.middleName = middleName;
