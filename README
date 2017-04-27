@@ -1,0 +1,15 @@
+Exercise 6
+Create Employee Registration System utilizing Hibernate Maven and Java
+uses PostgreSQL 9.4
+Hibernate 4.x
+
+Project Structure:
+app
+core
+   model
+   service
+   dao
+infra
+   persistence
+   buildtools
+utilities
