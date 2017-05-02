@@ -2,7 +2,7 @@ package com.exercise6.model;
 
 public class Roles {
 	
-	private Integer id;
+	private Integer roleId;
 	private String roleName;
 	private String roleCode;
 
@@ -10,6 +10,10 @@ public class Roles {
 	public Roles(String roleName, String roleCode) {
 		this.roleName = roleName;
 		this.roleCode = roleCode;
+	}
+
+	public Integer roleId() {
+		return this.roleId;
 	}
 
 	public String getRoleName() {
@@ -20,6 +24,10 @@ public class Roles {
 		return this.roleCode;
 	}
 
+	public void setRoleId(String input) {
+		this.roleId = input;
+	}
+
 	public void setRoleName(String input) {
 		this.roleName = input;
 	}
@@ -27,4 +35,6 @@ public class Roles {
 	public void setRoleCode(String input) {
 		this.roleCode = input;
 	}
+
+
 }

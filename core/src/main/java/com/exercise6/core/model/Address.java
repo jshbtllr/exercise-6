@@ -2,7 +2,7 @@ package com.exercise6.model;
 
 public class Address {
 	
-	private Integer id;
+	private Integer addressId;
 	private String streetNumber;
 	private String barangay;
 	private String city;
@@ -14,6 +14,10 @@ public class Address {
 		this.barangay = barangay;
 		this.city = city;
 		this.zipcode = zipcode;
+	}
+
+	private Integer getAddressId() {
+		return this.addressId;
 	}
 
 	public String getStreetNumber() {
@@ -30,6 +34,10 @@ public class Address {
 
 	public String getZipcode() {
 		return this.zipcode;
+	}
+
+	public void setAddressId(String input) {
+		this.addressId = input;
 	}
 
 	public void setStreetNumber(String input) {
