@@ -1,0 +1,121 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.exercise56</groupId>
+	<artifactId>EmployeeManagement</artifactId>
+	<version>1.0.1</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>app</module>
+		<module>core</module>
+		<module>infra</module>
+		<module>util</module>
+	</modules>
+
+	<properties>
+		<dependency-plugin-version>3.0.0</dependency-plugin-version>
+		<jar-plugin-version>3.0.2</jar-plugin-version>
+		<java-version>1.8</java-version>
+		<compiler-plugin-version>3.6.1</compiler-plugin-version>
+		<commons-dependency-version>3.0</commons-dependency-version>
+		<hibernate-dependency-version>4.3.11.Final</hibernate-dependency-version>
+		<postgres-driver-version>9.4.1212</postgres-driver-version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-dependency-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.exercise6.app</groupId>
+				<artifactId>app</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.exercise6.model</groupId>
+				<artifactId>model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.exercise6.service</groupId>
+				<artifactId>service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.exercise6.utility</groupId>
+				<artifactId>utility</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>hibernate-dependency-version</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgres-driver-version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+ 		<finalName>${project.artifactId}</finalName>
+ 		<pluginManagement>
+	 		<plugins>
+	 			<plugin>
+ 					<groupId>org.apache.maven.plugins</groupId>
+ 					<artifactId>maven-dependency-plugin</artifactId>
+ 					<version>${dependency-plugin-version}</version>
+ 					<executions>
+ 						<execution>
+ 							<id>copy-dependencies</id>
+ 							<phase>process-sources</phase>
+ 							<goals>
+ 								<goal>copy-dependencies</goal>
+ 							</goals>
+ 							<configuration>
+ 	  	     					<outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+   		   					</configuration>
+ 						</execution>
+ 					</executions>
+ 				</plugin> 	
+
+	 			<plugin>
+ 					<groupId>org.apache.maven.plugins</groupId>
+ 					<artifactId>maven-jar-plugin</artifactId>
+ 					<version>${jar-plugin-version}</version>
+ 					<configuration>
+ 						<archive>
+ 							<manifest>
+	 							<addClasspath>true</addClasspath>
+ 								<classpathPrefix>${project.build.finalName}/</classpathPrefix>
+ 								<mainClass>com.exercise6.app.Application</mainClass>
+ 							</manifest>
+ 						</archive>
+	 				</configuration>
+ 				</plugin>
+
+ 				<plugin>
+ 					<groupId>org.apache.maven.plugins</groupId>
+	 				<artifactId>maven-compiler-plugin</artifactId>
+ 					<version>${compiler-plugin-version}</version>
+ 					<configuration>
+ 						<source>${java-version}</source>
+ 						<target>${java-version}</target>
+	 				</configuration>
+ 				</plugin>
+ 			</plugins>
+		</pluginManagement>
+	 </build>		
+</project>
