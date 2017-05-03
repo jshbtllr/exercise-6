@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping>
+	<class name="com.exercise6.model.Roles" table="ROLES">
+		<meta attribute="class-description">
+			Class-Table mapping contains all Role details.
+		</meta>
+		<id name="roleId" type="int" column="RoleID">
+			<generator class="native"/>
+		</id>
+		<property name="roleCode" column="RoleCode" type="string"/>
+		<property name="roleName" column="RoleName" type="string"/>
+	</class>
+</hibernate-mapping>
