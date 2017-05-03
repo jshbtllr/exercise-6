@@ -1,0 +1,41 @@
+<project>
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.exercise6</groupId>
+		<artifactId>EmployeeRegistrationSystem</artifactId>
+		<version>1.0.1</version>
+	</parent>
+
+	<groupId>com.exercise6.app</groupId>
+	<artifactId>app</artifactId>
+	<version>1.0.1</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.exercise6.core</groupId>
+			<artifactId>service</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

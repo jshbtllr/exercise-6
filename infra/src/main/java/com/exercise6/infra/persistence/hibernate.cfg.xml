@@ -20,5 +20,9 @@
 		<property name="hibernate.connection.password">
 			ex1stgl0bal
 		</property>
+		
+		<mapping resource="Employee.hbm.xml"/>
+		<mapping resource="Roles.hbm.xml"/>
+		<mapping resource="ContactInfo.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>
