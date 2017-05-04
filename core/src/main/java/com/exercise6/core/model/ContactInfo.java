@@ -1,4 +1,4 @@
-package com.exercise6.model;
+package com.exercise6.core.model;
 
 public class ContactInfo {
 	

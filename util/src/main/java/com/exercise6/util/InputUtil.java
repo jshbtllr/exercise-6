@@ -1,7 +1,7 @@
 package com.exercise6.utility;
 import java.util.Scanner;
 
-public class InputValidationUtil {
+public class InputUtil {
 	public static int checkInteger() {
 		Scanner userInput = new Scanner(System.in);
 		String inputValue = new String();
@@ -24,6 +24,12 @@ public class InputValidationUtil {
 			}
 		}
 
+		return output;
+	}
+
+	public static getUserInput() {
+		Scanner userInput = new Scanner(System.in);
+		String output = userInput.nextLine();
 		return output;
 	}
 }

@@ -1,4 +1,9 @@
 package com.exercise6.core.service;
+import java.exercise6.core.model.Roles;
+import java.exercise6.core.model.Address;
+import java.exercise6.core.model.ContactInfo;
+import java.exercise6.core.model.Employee;
+import java.exercise6.util.InputUtil;
 import java.util.Scanner;
 
 public class ServiceManagement {
@@ -52,7 +57,16 @@ public class ServiceManagement {
 	}
 
 	public static void addRoles() {
-
+		String roleName = new String();
+		String roleCode = new String();
+		System.out.println("Add Role Function");
+		System.out.print("Provide RoleName: ");
+		roleName = InputUtil.getUserInput();
+		System.out.print("Provide RoleCode: ");
+		roleCode = InputUtil.getUserInput();
+		Roles role = new Roles(roleName, roleCode);
+		Integer test = EmployeeDAO.addRole();
+		System.out.println(test + " row inserted");
 	}
 
 	public static void removeRoles() {
