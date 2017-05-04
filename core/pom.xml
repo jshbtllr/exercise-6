@@ -17,6 +17,11 @@
 			<groupId>com.exercise6.util</groupId>
 			<artifactId>util</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.exercise6.infra</groupId>
+			<artifactId>infra</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -25,6 +30,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
 			</plugin>
 		</plugins>		
 	</build>

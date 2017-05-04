@@ -36,6 +36,10 @@ public class Employee {
 		this.role = role;
 	}
 
+	public Integer getEmployeeId() {
+		return this.employeeId;
+	}
+
 	public String getLastName() {
 		return this.lastName;
 	}
@@ -82,6 +86,10 @@ public class Employee {
 
 	public Set <Roles> getRoles() {
 		return this.role;
+	}
+
+	public void setEmployeeId(Integer input) {
+		this.employeeId = input;
 	}
 
 	public void setLastName(String input) {

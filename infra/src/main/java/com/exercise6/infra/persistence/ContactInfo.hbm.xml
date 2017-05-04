@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-	<class name="com.exercise6.model.ContactInfo" table="CONTACTINFO">
+	<class name="com.exercise6.core.model.ContactInfo" table="CONTACTINFO">
 		<meta attribute="class-description">
 			Class-Table mapping contains all contact info details of employees.
 		</meta>

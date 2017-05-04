@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-	<class name="com.exercise6.model.Employee" table="EMPLOYEE">
+	<class name="com.exercise6.core.model.Employee" table="EMPLOYEE">
 		<meta attribute="class-description">
 			Class-Table mapping contains all employee details.
 		</meta>
-		<id name="id" type="int" column="id">
+		<id name="employeeId" type="int" column="ID">
 			<generator class="native"/>
 		</id>
 		<property name="lastName" column="Last_Name" type="string"/>
@@ -13,7 +16,7 @@
 		<property name="middleName" column="Middle_Name" type="string"/>
 		<property name="suffix" column="Suffix" type="string"/>
 		<property name="title" column="Title" type="string"/>
-		<component name="address" class="Address">
+		<component name="address" class="com.exercise6.core.model.Address">
 			<property name="streetNumber" column="Street" type="string"/>
 			<property name="barangay" column="Barangay" type="string"/>
 			<property name="city" column="City" type="string"/>
@@ -23,13 +26,13 @@
 		<property name="gradeWeightAverage" column="GWA" type="float"/>
 		<property name="hireDate" column="Hire_Date" type="date"/>
 		<property name="employed" column="Employed" type="boolean"/>
-		<set name="contactInfo" cascade="ALL">
+		<set name="contactInfo" cascade="save-update">
 			<key column="EmployeeID"/>
-			<one-to-many class="com.exercise6.model.ContactInfo"/>
+			<one-to-many class="com.exercise6.core.model.ContactInfo"/>
 		</set>
 		<set name="role" cascade="save-update" table="EMPROLE">
 			<key column="EmployeeID"/>
-			<many-to-many column="RoleID" class="com.exercise6.model.Roles"/>
+			<many-to-many column="RoleID" class="com.exercise6.core.model.Roles"/>
 		</set>
 	</class>
 </hibernate-mapping>

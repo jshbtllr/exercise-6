@@ -12,7 +12,7 @@ public class Roles {
 		this.roleCode = roleCode;
 	}
 
-	public Integer roleId() {
+	public Integer getroleId() {
 		return this.roleId;
 	}
 
