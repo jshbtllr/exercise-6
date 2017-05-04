@@ -1,9 +1,10 @@
 package com.exercise6.core.service;
-import java.exercise6.core.model.Roles;
-import java.exercise6.core.model.Address;
-import java.exercise6.core.model.ContactInfo;
-import java.exercise6.core.model.Employee;
-import java.exercise6.util.InputUtil;
+import com.exercise6.core.model.Roles;
+import com.exercise6.core.model.Address;
+import com.exercise6.core.model.ContactInfo;
+import com.exercise6.core.model.Employee;
+import com.exercise6.util.InputUtil;
+import com.exercise6.core.dao.EmployeeDAO;
 import java.util.Scanner;
 
 public class ServiceManagement {
@@ -65,7 +66,7 @@ public class ServiceManagement {
 		System.out.print("Provide RoleCode: ");
 		roleCode = InputUtil.getUserInput();
 		Roles role = new Roles(roleName, roleCode);
-		Integer test = EmployeeDAO.addRole();
+		Integer test = EmployeeDAO.addRole(role);
 		System.out.println(test + " row inserted");
 	}
 

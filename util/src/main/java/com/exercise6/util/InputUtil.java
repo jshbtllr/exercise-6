@@ -1,4 +1,4 @@
-package com.exercise6.utility;
+package com.exercise6.util;
 import java.util.Scanner;
 
 public class InputUtil {
@@ -27,7 +27,7 @@ public class InputUtil {
 		return output;
 	}
 
-	public static getUserInput() {
+	public static String getUserInput() {
 		Scanner userInput = new Scanner(System.in);
 		String output = userInput.nextLine();
 		return output;

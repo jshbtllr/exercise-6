@@ -1,24 +1,27 @@
 package com.exercise6.core.dao;
-import java.exercise6.util.HibernateUtil;
-import java.exercise7.core.model.Roles;
-import java.exercise7.core.model.Address;
-import java.exercise7.core.model.ContactInfo;
-import java.exercise7.core.model.Employee;
+
+import com.exercise6.util.HibernateUtil;
+import com.exercise6.core.model.Roles;
+import com.exercise6.core.model.Address;
+import com.exercise6.core.model.ContactInfo;
+import com.exercise6.core.model.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
+import org.hibernate.HibernateException;
 
 public class EmployeeDAO {
 	public static Integer addRole(Roles role) {
-		Session session = HibernateUtil.getSessionFactory().session();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		Integer roleId = null;
 
 		try {
 			transaction = session.beginTransaction();
-			String hql = "INSERT INTO ROLES (rolecode, rolename) VALUES (:rolecode, :rolename)"
+			String hql = "INSERT INTO ROLES (rolecode, rolename) VALUES (:rolecode, :rolename)";
 			Query query = session.createQuery(hql);
-			query.setParameter("rolename", role.getRoleName);
-			query.setParameter("rolecode", role.getRoleCode);
+			query.setParameter("rolename", role.getRoleName());
+			query.setParameter("rolecode", role.getRoleCode());
 			roleId = query.executeUpdate();
 			//roleId = (Integer) session.save(role);
 			//transaction.commit();
