@@ -7,25 +7,19 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
-	private static SessionFactory sessionFactory = buildSessionFactory();
+	private static SessionFactory sessionFactory;
+	private static ServiceRegistry serviceRegistry;
 
 	private static SessionFactory buildSessionFactory() {
-		if (sessionFactory == null) {
-			Configuration configuration = new Configuration();
-			configuration.configure("com/exercise6/infra/persistence/hibernate.cfg.xml");
-			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-			SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		}
-
+		Configuration configuration = new Configuration();
+		configuration.configure("com/exercise6/infra/persistence/hibernate.cfg.xml");
+		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		return sessionFactory;
 	}
 
 	public static SessionFactory getSessionFactory() {
-		if (sessionFactory == null) {
-			sessionFactory = buildSessionFactory();
-		}
-
-		return sessionFactory;
+		return buildSessionFactory();
 	}
 
 	public static void shutdown() {

@@ -9,7 +9,7 @@
 			Class-Table mapping contains all Role details.
 		</meta>
 		<id name="roleId" type="int" column="RoleID">
-			<generator class="native"/>
+			<generator class="increment"/>
 		</id>
 		<property name="roleCode" column="RoleCode" type="string"/>
 		<property name="roleName" column="RoleName" type="string"/>

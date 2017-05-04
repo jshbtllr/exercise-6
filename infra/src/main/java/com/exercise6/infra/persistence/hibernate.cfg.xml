@@ -14,7 +14,7 @@
 		</property>
 
 		<property name="hibernate.connection.url">
-			jdbc:postgresql://localhost:5432/postgres
+			jdbc:postgresql://127.0.0.1:5432/postgres
 		</property>
 
 		<property name="hibernate.connection.username">
@@ -23,6 +23,10 @@
 
 		<property name="hibernate.connection.password">
 			ex1stgl0bal
+		</property>
+
+		<property name="hibernate.show_sql">
+			false
 		</property>
 		
 		<mapping resource="com/exercise6/infra/persistence/Employee.hbm.xml"/>

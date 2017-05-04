@@ -84,7 +84,7 @@ public class Employee {
 		return this.contactInfo;
 	}
 
-	public Set <Roles> getRoles() {
+	public Set <Roles> getRole() {
 		return this.role;
 	}
 
@@ -136,7 +136,7 @@ public class Employee {
 		this.contactInfo = input;
 	}
 
-	public void setRoles(Set <Roles> input) {
+	public void setRole(Set <Roles> input) {
 		this.role = input;
 	}
 
