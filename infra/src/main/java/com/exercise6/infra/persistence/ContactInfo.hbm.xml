@@ -9,7 +9,7 @@
 			Class-Table mapping contains all contact info details of employees.
 		</meta>
 		<id name="contactId" type="int" column="ContactID">
-			<generator class="native"/>
+			<generator class="increment"/>
 		</id>
 		<property name="infoType" column="ContactInfoType" type="string"/>
 		<property name="infoDetail" column="ContactInformation" type="string"/>
