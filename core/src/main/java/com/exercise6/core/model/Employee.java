@@ -15,13 +15,13 @@ public class Employee {
 	private Float gradeWeightAverage;
 	private Date hireDate;
 	private Boolean employed;
-	private ContactInfo contactInfo; 
-	private Roles role;
+	private Set <ContactInfo> contactInfo; 
+	private Set <Roles> role;
 
 	public Employee() {}
 	public Employee(String lastName, String firstName, String middleName, String suffix, String title, 
 					Address address, Date birthday, Float gradeWeightAverage, Date hireDate, Boolean employed, 
-					ContactInfo contactInfo, Roles role) {
+					Set <ContactInfo> contactInfo, Set <Roles> role) {
 		this.lastName = lastName;
 		this.firstName = firstName;
 		this.middleName = middleName;
@@ -76,11 +76,11 @@ public class Employee {
 		return this.employed;
 	}
 
-	public ContactInfo getContactInfo() {
+	public Set <ContactInfo> getContactInfo() {
 		return this.contactInfo;
 	}
 
-	public Roles getRoles() {
+	public Set <Roles> getRoles() {
 		return this.role;
 	}
 
@@ -104,31 +104,31 @@ public class Employee {
 		this.title = input;
 	}
 
-	public void setAddress(String input) {
+	public void setAddress(Address input) {
 		this.address = input;
 	}
 
-	public void setBirthday(String input) {
+	public void setBirthday(Date input) {
 		this.birthday = input;
 	}
 
-	public void setGradeWeightAverage(String input) {
+	public void setGradeWeightAverage(Float input) {
 		this.gradeWeightAverage = input;
 	}
 
-	public void setHireDate(String input) {
+	public void setHireDate(Date input) {
 		this.hireDate = input;
 	}
 
-	public void setEmployed(String input) {
+	public void setEmployed(Boolean input) {
 		this.employed = input;
 	}
 
-	public void setContactInfo(String input) {
+	public void setContactInfo(Set <ContactInfo> input) {
 		this.contactInfo = input;
 	}
 
-	public void setRoles(String input) {
+	public void setRoles(Set <Roles> input) {
 		this.role = input;
 	}
 

@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.exercise6.core</groupId>
-			<artifactId>service</artifactId>
+			<artifactId>core</artifactId>
 		</dependency>
 	</dependencies>
 

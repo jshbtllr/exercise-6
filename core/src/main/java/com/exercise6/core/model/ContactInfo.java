@@ -13,7 +13,7 @@ public class ContactInfo {
 	}
 
 	public Integer getContactId() {
-		return this.id;
+		return this.contactId;
 	}
 
 	public String getInfoType() {
@@ -24,7 +24,7 @@ public class ContactInfo {
 		return this.infoDetail;
 	}
 
-	public void setContactId(String input) {
+	public void setContactId(Integer input) {
 		this.contactId = input;
 	}
 

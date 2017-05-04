@@ -36,7 +36,7 @@ public class Address {
 		return this.zipcode;
 	}
 
-	public void setAddressId(String input) {
+	public void setAddressId(Integer input) {
 		this.addressId = input;
 	}
 

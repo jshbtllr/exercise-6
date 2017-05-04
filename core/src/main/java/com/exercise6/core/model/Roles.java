@@ -24,7 +24,7 @@ public class Roles {
 		return this.roleCode;
 	}
 
-	public void setRoleId(String input) {
+	public void setRoleId(Integer input) {
 		this.roleId = input;
 	}
 

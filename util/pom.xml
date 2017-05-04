@@ -12,6 +12,13 @@
 	<artifactId>util</artifactId>
 	<version>1.0.1</version>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>

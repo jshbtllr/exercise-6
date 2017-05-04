@@ -38,27 +38,27 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.exercise6.model</groupId>
-				<artifactId>model</artifactId>
+				<groupId>com.exercise6.infra</groupId>
+				<artifactId>infra</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.exercise6.service</groupId>
-				<artifactId>service</artifactId>
+				<groupId>com.exercise6.util</groupId>
+				<artifactId>util</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.exercise6.utility</groupId>
-				<artifactId>utility</artifactId>
+				<groupId>com.exercise6.core</groupId>
+				<artifactId>core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>hibernate-dependency-version</version>
+				<version>${hibernate-dependency-version}</version>
 			</dependency>
 
 			<dependency>
