@@ -6,6 +6,7 @@ import com.exercise6.core.model.Employee;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.dao.EmployeeDAO;
 import java.util.Scanner;
+import java.util.List;
 
 public class ServiceManagement {
 	public static void createEmployee() {
@@ -57,25 +58,38 @@ public class ServiceManagement {
 
 	}
 
-	public static void addRoles() {
-		String roleName = new String();
-		String roleCode = new String();
-		System.out.println("Add Role Function");
-		System.out.print("Provide RoleName: ");
-		roleName = InputUtil.getUserInput();
-		System.out.print("Provide RoleCode: ");
-		roleCode = InputUtil.getUserInput();
-		Roles role = new Roles(roleName, roleCode);
-		Integer test = EmployeeDAO.addRole(role);
-		System.out.println(test + " row inserted");
+	public static void addRoles(Roles role) {
+		Integer match = EmployeeDAO.checkOccurrence(role, 1).intValue();
+
+		if (match > 0) {
+			System.out.println("RoleCode already exists in the database");
+		} else {
+			Integer rows = EmployeeDAO.addRole(role);
+			System.out.println(rows + " row added to ROLES table");
+		}
 	}
 
-	public static void removeRoles() {
+	public static void removeRoles(Roles role) {
+		Integer match = EmployeeDAO.checkOccurrence(role, 2).intValue();
+
+		if (match == 0) {
+			System.out.println("Specified Role does not exist in table ROLES");
+		} else {
+			match = EmployeeDAO.checkOccurrence(role, 3).intValue();
+			if (match == 0) {
+				Integer rows = EmployeeDAO.deleteRole(role);
+				System.out.println(rows + " row deleted from table");
+			} else {
+				System.out.println("Specified Role still belongs to an employee");
+			}
+		}
+
 
 	}
 
-	public static void listRoles() {
-
+	public static void listRoles(String rule) {
+		Integer order = Integer.parseInt(rule);
+		EmployeeDAO.showRoles(order);
 	}
 
 	public static void updateRoles() {

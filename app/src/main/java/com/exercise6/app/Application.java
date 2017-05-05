@@ -1,6 +1,8 @@
 package com.exercise6.app;
 import java.util.Scanner;
+import com.exercise6.util.InputUtil;
 import com.exercise6.core.service.ServiceManagement;
+import com.exercise6.core.model.Roles;
 
 public class Application {
 	public static void main (String [] args) {
@@ -21,8 +23,7 @@ public class Application {
 			System.out.println(" [8]   Exit Tool");
 			System.out.print("\nChoose corresponding number to choose a function: ");
 
-			Scanner input = new Scanner(System.in);
-			function = input.nextLine();
+			function = InputUtil.getUserInput();
 
 			System.out.println("");
 
@@ -46,7 +47,7 @@ public class Application {
 						System.out.println("[3]  Date Hired");
 						System.out.print("Choose corresponding number to sort: ");
 
-						sortFunction = input.nextLine();
+						sortFunction = InputUtil.getUserInput();
 
 						switch (sortFunction) {
 							case "1":
@@ -78,7 +79,7 @@ public class Application {
 						System.out.println("[3]  Exit");
 						System.out.print("Choose corresponding number to sort: ");
 
-						employeeRoleFunction = input.nextLine();
+						employeeRoleFunction = InputUtil.getUserInput();
 
 						switch (employeeRoleFunction) {
 							case "1":
@@ -109,7 +110,7 @@ public class Application {
 						System.out.println("[5]  Exit");
 						System.out.print("Choose corresponding number select a function: ");
 
-						contactInfoFunction = input.nextLine();
+						contactInfoFunction = InputUtil.getUserInput();
 
 						switch (contactInfoFunction) {
 							case "1":
@@ -139,6 +140,8 @@ public class Application {
 				case "7":
 					String roleFunction = new String();
 					System.out.println("Role Management");
+					String roleName = new String();
+					String roleCode = new String();				
 
 					while(!subFunctionFlag) {
 						System.out.println("[1]  Add Role");
@@ -147,20 +150,40 @@ public class Application {
 						System.out.println("[4]  List Roles");
 						System.out.println("[5]  Exit");
 
-						roleFunction = input.nextLine();
+						roleFunction = InputUtil.getUserInput();
 
 						switch (roleFunction) {
 							case "1":
-								ServiceManagement.addRoles();
+								System.out.println("Adding Role with the below information:");
+								System.out.print("Provide RoleCode: ");
+								roleCode = InputUtil.getUserInput();
+								System.out.print("Provide RoleName: ");
+								roleName = InputUtil.getUserInput();
+								Roles addedRole = new Roles(roleName, roleCode);		
+														
+								ServiceManagement.addRoles(addedRole);
 								break;
 							case "2":
-								ServiceManagement.removeRoles();
+								System.out.println("Deleting Role with the below information:");
+								System.out.print("Provide RoleCode: ");
+								roleCode = InputUtil.getUserInput();
+								System.out.print("Provide RoleName: ");
+								roleName = InputUtil.getUserInput();
+								Roles deletedRole = new Roles(roleName, roleCode);
+
+								ServiceManagement.removeRoles(deletedRole);
 								break;
 							case "3":
 								ServiceManagement.updateRoles();
 								break;
 							case "4":
-								ServiceManagement.listRoles();
+								System.out.println("List all available Roles");
+								System.out.println("[1] by RoleID");
+								System.out.println("[2] by RoleCode");
+								System.out.println("[3] by RoleName");
+								System.out.print("Choose order rule from above: ");
+								String orderRule = InputUtil.getUserInput();
+								ServiceManagement.listRoles(orderRule);
 								break;
 							case "5":
 								subFunctionFlag = true;
@@ -179,9 +202,7 @@ public class Application {
 					System.out.println(function + " is not a valid function. Choose another function");
 					break;	
 			}
-
 			subFunctionFlag = false;
-
 		}
 	}
 }
