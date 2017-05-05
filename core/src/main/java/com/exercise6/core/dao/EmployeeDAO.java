@@ -8,6 +8,7 @@ import com.exercise6.core.model.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import java.util.List;
@@ -91,13 +92,14 @@ public class EmployeeDAO {
 				System.out.println("Invalid order rule, order will be set to defaul order by RoleID");
 				query = session.createSQLQuery("FROM ROLES ORDER BY RoleID");	
 			}
+
+			Criteria criteria = session.createCriteria(Roles.class);
+
 			
-			List roleList = query.list();
-			System.out.println(roleList.size());
-			System.out.println((Roles)roleList.get(0).getRoleId());
-		/*	for (int i = 0; i < roleList.size(); i++) {
-				System.out.println("RoleID: " + roleList.get(i).getRoleId() + "        RoleCode: " + roleList.get(i).getRoleCode() + "              RoleName: " + roleList.get(i).getRoleName());
-			}*/
+			List <Roles> roleList = criteria.list();
+			for (Roles roles : roleList) {
+				System.out.println("RoleID: " + roles.getRoleId() + "        RoleCode: " + roles.getRoleCode() + "              RoleName: " + roles.getRoleName());
+			}
 
 		} catch(HibernateException he) {
 			if (transaction != null) {
