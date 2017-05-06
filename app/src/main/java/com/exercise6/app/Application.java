@@ -13,22 +13,23 @@ public class Application {
 		while(!exit) {
 			System.out.println("\nEmployee Database");
 			System.out.println("Menu");
-			System.out.println(" [1]   Create Employee");
-			System.out.println(" [2]   Delete Employee");
-			System.out.println(" [3]   Update Employee Details");
-			System.out.println(" [4]   List all Employees");
-			System.out.println(" [5]   Manage Employee Roles");
-			System.out.println(" [6]   Manage Employee Contacts");
-			System.out.println(" [7]   Role Management");
-			System.out.println(" [8]   Exit Tool");
+			System.out.println(" [1]    Create Employee");
+			System.out.println(" [2]    Delete Employee");
+			System.out.println(" [3]    Update Employee Details");
+			System.out.println(" [4]    List all Employees");
+			System.out.println(" [5]    Manage Employee Roles");
+			System.out.println(" [6]    Manage Employee Contacts");
+			System.out.println(" [7]    Role Management");
+			System.out.println(" [8]    Exit Tool");
 			System.out.print("\nChoose corresponding number to choose a function: ");
 
-			function = InputUtil.getUserInput();
+			function = InputUtil.getRequiredInput();
 
 			System.out.println("");
 
 			switch (function) {
 				case "1":
+					System.out.println("Create a new employee");
 					ServiceManagement.createEmployee();
 					break;
 				case "2":
@@ -42,12 +43,12 @@ public class Application {
 					System.out.println("Employee List sorted by: ");
 
 					while (!subFunctionFlag) {
-						System.out.println("[1]  Last Name");
-						System.out.println("[2]  General Weighted Average");
-						System.out.println("[3]  Date Hired");
+						System.out.println("[1]    Last Name");
+						System.out.println("[2]    General Weighted Average");
+						System.out.println("[3]    Date Hired");
 						System.out.print("Choose corresponding number to sort: ");
 
-						sortFunction = InputUtil.getUserInput();
+						sortFunction = InputUtil.getRequiredInput();
 
 						switch (sortFunction) {
 							case "1":
@@ -74,12 +75,12 @@ public class Application {
 					System.out.println("Add or Remove Roles assigned to an Employee");
 
 					while (!subFunctionFlag) {
-						System.out.println("[1]  Add Roles to Employee");
-						System.out.println("[2]  Remove Roles from Employee");
-						System.out.println("[3]  Exit");
+						System.out.println("[1]    Add Roles to Employee");
+						System.out.println("[2]    Remove Roles from Employee");
+						System.out.println("[3]    Exit");
 						System.out.print("Choose corresponding number to sort: ");
 
-						employeeRoleFunction = InputUtil.getUserInput();
+						employeeRoleFunction = InputUtil.getRequiredInput();
 
 						switch (employeeRoleFunction) {
 							case "1":
@@ -103,14 +104,14 @@ public class Application {
 					System.out.println("Contact Information Management");
 
 					while(!subFunctionFlag) {
-						System.out.println("[1]  Add Contact Information");
-						System.out.println("[2]  Remove Contact Information");
-						System.out.println("[3]  Update Contact Information");
-						System.out.println("[4]  List Contact Information");
-						System.out.println("[5]  Exit");
+						System.out.println("[1]    Add Contact Information");
+						System.out.println("[2]    Remove Contact Information");
+						System.out.println("[3]    Update Contact Information");
+						System.out.println("[4]    List Contact Information");
+						System.out.println("[5]    Exit");
 						System.out.print("Choose corresponding number select a function: ");
 
-						contactInfoFunction = InputUtil.getUserInput();
+						contactInfoFunction = InputUtil.getRequiredInput();
 
 						switch (contactInfoFunction) {
 							case "1":
@@ -133,6 +134,7 @@ public class Application {
 								System.out.println("\nInvalid Function, choose another function below:");
 								break;
 						}
+					System.out.println("\nSelect Contact Info Management Option above:");
 
 					}
 
@@ -144,21 +146,22 @@ public class Application {
 					String roleCode = new String();				
 
 					while(!subFunctionFlag) {
-						System.out.println("[1]  Add Role");
-						System.out.println("[2]  Remove Roles");
-						System.out.println("[3]  Update Roles");
-						System.out.println("[4]  List Roles");
-						System.out.println("[5]  Exit");
+						System.out.println("[1]    Add Role");
+						System.out.println("[2]    Remove Roles");
+						System.out.println("[3]    Update Roles");
+						System.out.println("[4]    List Roles");
+						System.out.println("[5]    Exit");
+						System.out.print("\nChoose an option above: ");
 
-						roleFunction = InputUtil.getUserInput();
+						roleFunction = InputUtil.getRequiredInput();
 
 						switch (roleFunction) {
 							case "1":
 								System.out.println("Adding Role with the below information:");
 								System.out.print("Provide RoleCode: ");
-								roleCode = InputUtil.getUserInput();
+								roleCode = InputUtil.getRequiredInput();
 								System.out.print("Provide RoleName: ");
-								roleName = InputUtil.getUserInput();
+								roleName = InputUtil.getRequiredInput();
 								Roles addedRole = new Roles(roleName, roleCode);		
 														
 								ServiceManagement.addRoles(addedRole);
@@ -166,31 +169,44 @@ public class Application {
 							case "2":
 								System.out.println("Deleting Role with the below information:");
 								System.out.print("Provide RoleCode: ");
-								roleCode = InputUtil.getUserInput();
+								roleCode = InputUtil.getRequiredInput();
 								System.out.print("Provide RoleName: ");
-								roleName = InputUtil.getUserInput();
+								roleName = InputUtil.getRequiredInput();
 								Roles deletedRole = new Roles(roleName, roleCode);
 
 								ServiceManagement.removeRoles(deletedRole);
 								break;
 							case "3":
-								ServiceManagement.updateRoles();
+								System.out.println("Update Roles");
+								Integer rows = ServiceManagement.listRoles(1);
+								System.out.print("\nChoose the role id of the role to edit: ");
+								Integer roleId = InputUtil.inputOptionCheck(rows);
+
+								System.out.println("\nEdit: ");
+								System.out.println("[1]    RoleCode");
+								System.out.println("[2]    RoleName");
+								System.out.println("[3]    Both");
+								System.out.print("Choose Option above: ");
+								Integer option = InputUtil.inputOptionCheck(3);
+								ServiceManagement.updateRoles(roleId, option);
+
 								break;
 							case "4":
 								System.out.println("List all available Roles");
-								System.out.println("[1] by RoleID");
-								System.out.println("[2] by RoleCode");
-								System.out.println("[3] by RoleName");
+								System.out.println("[1]    by RoleID");
+								System.out.println("[2]    by RoleCode");
+								System.out.println("[3]    by RoleName");
 								System.out.print("Choose order rule from above: ");
-								String orderRule = InputUtil.getUserInput();
-								ServiceManagement.listRoles(orderRule);
+								Integer orderRule = InputUtil.inputOptionCheck(3);
+								Integer out = ServiceManagement.listRoles(orderRule);
+								System.out.println(out + " rows printed");
 								break;
 							case "5":
 								subFunctionFlag = true;
 								System.out.println("Exit Role Management");
 								break;
 							default:
-								System.out.println("\nInvalid Function, choose another function below:");
+								System.out.println("\nInvalid Function.");
 								break;
 						}
 					}
