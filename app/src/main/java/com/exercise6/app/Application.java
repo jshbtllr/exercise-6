@@ -39,34 +39,23 @@ public class Application {
 					ServiceManagement.updateEmployee();
 					break;
 				case "4":
-					String sortFunction = new String();
+					Integer sortFunction;
 					System.out.println("Employee List sorted by: ");
 
 					while (!subFunctionFlag) {
 						System.out.println("[1]    Last Name");
 						System.out.println("[2]    General Weighted Average");
 						System.out.println("[3]    Date Hired");
+						System.out.println("[4]    Exit");
 						System.out.print("Choose corresponding number to sort: ");
 
-						sortFunction = InputUtil.getRequiredInput();
-
-						switch (sortFunction) {
-							case "1":
-								subFunctionFlag = true;
-								ServiceManagement.listEmployeeByLastName();
-								break;
-							case "2":
-								subFunctionFlag = true;
-								ServiceManagement.listEmployeeByGWA();
-								break;
-							case "3":
-								subFunctionFlag = true;
-								ServiceManagement.listEmployeeByHireDate();
-								break;
-							default:
-								System.out.println("\nInvalid Function, choose another function below:");
-								break;
+						sortFunction = InputUtil.inputOptionCheck(4);
+						if (sortFunction == 4) {
+							break;
 						}
+						Integer rows = ServiceManagement.listEmployees(sortFunction);
+
+						System.out.println(rows + " Employees retrieved");
 					}
 
 					break;
@@ -77,8 +66,9 @@ public class Application {
 					while (!subFunctionFlag) {
 						System.out.println("[1]    Add Roles to Employee");
 						System.out.println("[2]    Remove Roles from Employee");
-						System.out.println("[3]    Exit");
-						System.out.print("Choose corresponding number to sort: ");
+						System.out.println("[3]    List All Roles from Employee");						
+						System.out.println("[4]    Exit");
+						System.out.print("Choose Function: ");
 
 						employeeRoleFunction = InputUtil.getRequiredInput();
 
@@ -90,6 +80,9 @@ public class Application {
 								ServiceManagement.removeEmployeeRoles();
 								break;
 							case "3":
+								ServiceManagement.listEmployeeRoles();
+								break;
+							case "4":
 								subFunctionFlag = true;
 								System.out.println("Exit Add or Remove Roles assigned");
 								break;

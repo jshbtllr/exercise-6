@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 public class InputUtil {
-	public static int inputOptionCheck(Integer maxValue) {
+	public static Integer inputOptionCheck(Integer maxValue) {
 		Scanner userInput = new Scanner(System.in);
 		String inputValue = new String();
 		Integer output = new Integer(0);
@@ -29,6 +29,31 @@ public class InputUtil {
 
 		return output;
 	}
+
+	public static Integer inputOptionCheck() {
+		Scanner userInput = new Scanner(System.in);
+		String inputValue = new String();
+		Integer output = new Integer(0);
+
+		while (true){
+			inputValue = userInput.nextLine();
+			
+			try{
+				output = Integer.parseInt(inputValue);
+				
+				if (output < 1) {
+					System.out.print("Input invalid. Choose another: ");
+				} else {
+					break;
+				}
+
+			} catch (NumberFormatException ne) {
+				System.out.print("Input not a number, please provide another: ");
+			}
+		}
+
+		return output;
+	}	
 
 	public static String getRequiredInput() {
 		Scanner userInput = new Scanner(System.in);
@@ -88,10 +113,10 @@ public class InputUtil {
 		input = userInput.nextLine();
 
 		while(true) {
-			if(input == "Y"){
+			if(input.equalsIgnoreCase("Y")){
 				output = true;
 				break;
-			} else if (input == "N") {
+			} else if (input.equalsIgnoreCase("N")) {
 				break;
 			} else {
 				System.out.print("Input not Y or N. Input another value: ");
