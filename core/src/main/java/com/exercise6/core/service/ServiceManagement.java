@@ -79,10 +79,18 @@ public class ServiceManagement {
 
 	public static void deleteEmployee() {
 		System.out.println("Delete Employee");
+		Integer rows = EmployeeDAO.showEmployees(1);
+		System.out.print("Choose Employee ID to be deleted: ");
+		Integer employeeId = InputUtil.inputOptionCheck();
+		EmployeeDAO.employeeDelete(employeeId);
 	}
 
 	public static void updateEmployee() {
-		System.out.println("update Employee");
+		System.out.println("Update Employee");
+		Integer rows = EmployeeDAO.showEmployees(1);
+		System.out.print("Choose Employee ID to be updated: ");
+		Integer employeeId = InputUtil.inputOptionCheck();
+		EmployeeDAO.employeeUpdate(employeeId);
 	}
 
 	public static Integer listEmployees(Integer ruleOrder) {

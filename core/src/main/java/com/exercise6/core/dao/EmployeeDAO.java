@@ -1,6 +1,7 @@
 package com.exercise6.core.dao;
 
 import com.exercise6.util.HibernateUtil;
+import com.exercise6.util.InputUtil;
 import com.exercise6.core.model.Roles;
 import com.exercise6.core.model.Address;
 import com.exercise6.core.model.ContactInfo;
@@ -11,8 +12,11 @@ import org.hibernate.Query;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class EmployeeDAO {
 	public static Integer addEmployee (Employee employee) {
@@ -55,6 +59,179 @@ public class EmployeeDAO {
 		}
 
 		return rows;		
+	}
+
+	public static void employeeUpdate(Integer employeeId) {
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		Integer rows = new Integer(0);
+		String hql = new String();
+		Query query = null;
+
+		try {
+			transaction = session.beginTransaction();
+			hql = "SELECT * FROM EMPLOYEE WHERE Id = :employeeid";
+			query = session.createSQLQuery(hql);
+			query.setParameter("employeeid", employeeId);
+
+			if(!query.list().isEmpty()) {
+				System.out.println("[1]    Full Name");
+				System.out.println("[2]    Address");
+				System.out.println("[3]    Birthday");
+				System.out.println("[4]    GWA");
+				System.out.println("[5]    Employment Status");
+				System.out.print("Choose function above: ");
+				Integer option = InputUtil.inputOptionCheck(5);
+
+				if(option == 1) {
+					System.out.print("Input New First Name: ");
+					String firstName = InputUtil.getRequiredInput();
+					System.out.print("Input New Last Name: ");
+					String lastName = InputUtil.getRequiredInput();
+					System.out.print("Input New Middle Name: ");
+					String middleName = InputUtil.getRequiredInput();
+					System.out.print("Input New Suffix Name: ");
+					String suffix = InputUtil.getRequiredInput();
+					System.out.print("Input New Title Name: ");
+					String title = InputUtil.getRequiredInput();
+					hql = "UPDATE EMPLOYEE SET last_name = :lastname, first_name = :firstname, middle_name = :middlename, " +
+							"suffix = :suffix, title = :title WHERE id = :employeeid";
+					query = session.createSQLQuery(hql);
+					query.setParameter("lastname", lastName);
+					query.setParameter("firstname", firstName);
+					query.setParameter("middlename", middleName);
+					query.setParameter("suffix", suffix);
+					query.setParameter("title", title);
+				} else if(option == 2) {
+					System.out.print("Input New Street Number: ");
+					String streetNumber = InputUtil.getRequiredInput();
+					System.out.print("Input New Barangay: ");
+					String barangay = InputUtil.getRequiredInput();
+					System.out.print("Input New City: ");
+					String city = InputUtil.getRequiredInput();
+					System.out.print("Input New Zipcode: ");
+					String zipcode = InputUtil.getRequiredInput();	
+					hql = "UPDATE EMPLOYEE SET street = :street, barangay = :barangay, " +
+							"city = :city, zipcode = :zipcode WHERE id = :employeeid";					
+					query = session.createSQLQuery(hql);
+					query.setParameter("street", streetNumber);
+					query.setParameter("barangay", barangay);
+					query.setParameter("city", city);
+					query.setParameter("zipcode", zipcode);				
+				} else if (option == 3) {
+					System.out.print("Input New Birthdate (dd/mm/yyyy): ");
+					Date birthday = InputUtil.getDate();
+					hql = "UPDATE EMPLOYEE SET birthday =: date WHERE id = :employeeid";
+					query = session.createSQLQuery(hql);
+					query.setParameter("date", birthday);
+				} else if (option == 4) {
+					System.out.print("Input new GWA: ");
+					Float gwa = InputUtil.getGrade();
+					hql = "UPDATE EMPLOYEE SET gwa = :gwa WHERE id = :employeeid";
+					query = session.createSQLQuery(hql);
+					query.setParameter("gwa", gwa);					
+				} else {
+					System.out.print("Input New Employee Status Y if person is employed, N if not: ");
+					Boolean employed = InputUtil.getStatus();
+					Date hireDate = null;
+					if (employed == true) {
+						System.out.print("Enter Employee Hire Date in format dd/mm/yyyy: ");
+						hireDate = InputUtil.getDate();
+					} else {
+						try {
+							SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+							hireDate = format.parse("01/01/0001");
+						} catch(ParseException pe) {
+							pe.printStackTrace();
+						}
+					}
+					hql = "UPDATE EMPLOYEE SET hire_date = :date, employed = :emp WHERE id = :employeeid";
+					query = session.createSQLQuery(hql);
+					query.setParameter("date", hireDate);	
+					query.setParameter("emp", employed);	
+				}
+
+				query.setParameter("employeeid", employeeId);
+				Integer updated = query.executeUpdate();
+				transaction.commit();
+
+			} else {
+				System.out.println("Employee does not exist.");
+			}
+
+		} catch(HibernateException he) {
+			if (transaction != null)  {
+				transaction.rollback();
+			}
+			System.out.println("Error occurred");
+			he.printStackTrace();
+		} finally {
+			session.close();
+			HibernateUtil.shutdown(sessionFactory);
+		}
+	}
+
+	public static void employeeDelete(Integer employeeId) {
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		Integer rows = new Integer(0);
+		String hql = new String();
+		Query query = null;
+
+		try {
+			transaction = session.beginTransaction();
+			hql = "SELECT * FROM EMPLOYEE WHERE Id = :employeeid";
+			query = session.createSQLQuery(hql);
+			query.setParameter("employeeid", employeeId);
+
+			if(!query.list().isEmpty()) {
+				hql = "SELECT * FROM EMPROLE WHERE EmployeeID = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("employeeid", employeeId);
+
+				if(!query.list().isEmpty()) {
+					hql = "DELETE FROM EMPROLE WHERE EmployeeID = :employeeid";
+					query = session.createSQLQuery(hql);
+					query.setParameter("employeeid", employeeId);
+					Integer deletedRows = query.executeUpdate();
+					System.out.println(deletedRows + " employee's roles were deleted");
+				} else {
+					System.out.println("No roles assigned to employee and none deleted.");
+				}
+
+				hql = "SELECT * FROM CONTACTINFO WHERE EmployeeID = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("employeeid", employeeId);				
+
+				if(!query.list().isEmpty()) {
+					hql = "DELETE FROM CONTACTINFO WHERE EmployeeID = :employeeid";
+					query = session.createSQLQuery(hql);
+					query.setParameter("employeeid", employeeId);
+					Integer deletedContacts = query.executeUpdate();
+					System.out.println(deletedContacts + " employee's contacts were deleted");
+				} else {
+					System.out.println("No contact info assigned to employee and none deleted.");	
+				}
+
+				hql = "DELETE FROM EMPLOYEE WHERE id = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("employeeid", employeeId);
+				Integer deletedEmployee = query.executeUpdate();				
+				System.out.println(deletedEmployee + " Employee Deleted.");
+
+			} else {
+				System.out.println("Employee does not exist. No employee deleted");
+			}		
+		} catch(HibernateException he) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			HibernateUtil.shutdown(sessionFactory);
+		}			
+
 	}
 
 	public static Integer showEmployees(Integer order) {
