@@ -108,6 +108,7 @@ public class ContactDAO {
 				query.setParameter("employeeID", employeeId);
 				contactDelete = query.executeUpdate();	
 				transaction.commit();	
+				System.out.println("Contact Info deleted");
 			} else {
 				System.out.println("Contact ID chosen is invalid, no contacts were deleted.");
 			}		

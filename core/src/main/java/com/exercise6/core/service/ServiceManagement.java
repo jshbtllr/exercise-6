@@ -85,7 +85,7 @@ public class ServiceManagement {
 		Integer employeeId = InputUtil.inputOptionCheck();
 		
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}
 
@@ -99,7 +99,7 @@ public class ServiceManagement {
 		Integer employeeId = InputUtil.inputOptionCheck();
 		
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}	
 
@@ -122,7 +122,7 @@ public class ServiceManagement {
 		employeeId = InputUtil.inputOptionCheck();
 
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}
 
@@ -130,7 +130,6 @@ public class ServiceManagement {
 		roleCode = InputUtil.getRequiredInput();
 
 		Roles added = new Roles(" ", roleCode);
-		System.out.println(added.getRoleCode());
 		
 		roleExist = RoleDAO.checkOccurrence(added,1).intValue();
 
@@ -149,7 +148,7 @@ public class ServiceManagement {
 		employeeId = InputUtil.inputOptionCheck();
 
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}
 
@@ -167,7 +166,7 @@ public class ServiceManagement {
 		employeeId = InputUtil.inputOptionCheck();
 
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}		
 
@@ -183,7 +182,7 @@ public class ServiceManagement {
 		Integer emplId = InputUtil.inputOptionCheck();
 
 		while (!(EmployeeDAO.employeeCheck(emplId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			emplId = InputUtil.inputOptionCheck();
 		}
 
@@ -215,12 +214,12 @@ public class ServiceManagement {
 		employeeId = InputUtil.inputOptionCheck();
 
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}		
 
 		Integer contacts = ContactDAO.employeeContact(employeeId);
-		System.out.print("Choose the ContactID to be deleted");
+		System.out.print("Choose the ContactID to be deleted: ");
 		Integer contactID = InputUtil.inputOptionCheck();
 
 		ContactDAO.deleteContact(contactID, employeeId);
@@ -234,7 +233,7 @@ public class ServiceManagement {
 		employeeId = InputUtil.inputOptionCheck();	
 
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}		
 
@@ -253,7 +252,7 @@ public class ServiceManagement {
 		employeeId = InputUtil.inputOptionCheck();
 
 		while (!(EmployeeDAO.employeeCheck(employeeId))) {
-			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}				
 

@@ -90,10 +90,10 @@ public class EmployeeDAO {
 				String lastName = InputUtil.getRequiredInput();
 				System.out.print("Input New Middle Name: ");
 				String middleName = InputUtil.getRequiredInput();
-				System.out.print("Input New Suffix Name: ");
-				String suffix = InputUtil.getRequiredInput();
-				System.out.print("Input New Title Name: ");
-				String title = InputUtil.getRequiredInput();
+				System.out.print("Input New Suffix Name (optional):  ");
+				String suffix = InputUtil.getOptionalInput();
+				System.out.print("Input New Title Name (optional): ");
+				String title = InputUtil.getOptionalInput();
 				hql = "UPDATE EMPLOYEE SET last_name = :lastname, first_name = :firstname, middle_name = :middlename, " +
 						"suffix = :suffix, title = :title WHERE id = :employeeid";
 				query = session.createSQLQuery(hql);
@@ -176,6 +176,10 @@ public class EmployeeDAO {
 
 		try {
 			transaction = session.beginTransaction();
+
+			hql = "SELECT * FROM EMPROLE WHERE EmployeeID = :employeeid";
+			query = session.createSQLQuery(hql);
+			query.setParameter("employeeid", employeeId);
 
 			if(!query.list().isEmpty()) {
 				hql = "DELETE FROM EMPROLE WHERE EmployeeID = :employeeid";
@@ -292,23 +296,23 @@ public class EmployeeDAO {
 			query.setParameter("rolecode", role.getRoleCode());
 			Number roleId = (Number) query.list().get(0);
 
-			hql = "SELECT RoleID FROM EMPROLE WHERE EmployeeID = :employeeid";
+			hql = "SELECT RoleID FROM EMPROLE WHERE EmployeeID = :employeeid and RoleID = :roleid";
 			query = session.createSQLQuery(hql);
+			query.setParameter("roleid", roleId.intValue());
 			query.setParameter("employeeid", employeeId);
 
-			Number occurred = (Number) query.list().get(0);
-
-			if (occurred.intValue() == 0) {
+			if (query.list().isEmpty()) {
 				hql = "INSERT INTO EMPROLE (EmployeeID, RoleID) VALUES (:employeeid, :roleid)";
 				query = session.createSQLQuery(hql);
 				query.setParameter("employeeid", employeeId);
 				query.setParameter("roleid", roleId.intValue());
-				Integer rows = query.executeUpdate();					
+				Integer rows = query.executeUpdate();	
+				transaction.commit();
+				System.out.println(rows + " role added to employee")			;
 			} else {
 				System.out.println("Role Already assigned to employee"); 
 			}
 
-			transaction.commit();
 
 		} catch(HibernateException he) {
 			if (transaction != null)  {
@@ -393,7 +397,8 @@ public class EmployeeDAO {
 				query = session.createSQLQuery(hql);			
 				query.setParameter("roleid", occurred.intValue());
 				roleDelete = query.executeUpdate();
-				transaction.commit();				
+				transaction.commit();		
+				System.out.println("Role has been deleted");
 			} else {
 				System.out.println("Role can't be deleted since it is not assigned to employee");
 			}
