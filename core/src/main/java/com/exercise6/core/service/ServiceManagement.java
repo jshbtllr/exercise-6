@@ -33,55 +33,62 @@ public class ServiceManagement {
 		Set <ContactInfo> contacts = new HashSet <ContactInfo>();
 		Set <Roles> role = new HashSet <Roles>();
 
-		System.out.print("Enter Employee Last Name: ");
+		System.out.println("Creating a new Employee in database");
+		System.out.print("Employee's Full Name Details:\nLast Name: ");
 		lastName = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee First Name: ");
+		System.out.print("First Name: ");
 		firstName = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee Middle Name: ");
+		System.out.print("Middle Name: ");
 		middleName = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee Suffix: (optional) ");
+		System.out.print("Suffix: (optional) ");
 		suffix = InputUtil.getOptionalInput();
-		System.out.print("Enter Employee Title: (optional) ");
+		System.out.print("Title: (optional) ");
 		title = InputUtil.getOptionalInput();
-		System.out.print("Enter Employee Street Number: ");
+		System.out.print("Employee's Address:\nStreet Number: ");
 		streetNumber = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee Barangay: ");
+		System.out.print("Barangay: ");
 		barangay = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee City: ");
+		System.out.print("City: ");
 		city = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee Zipcode: ");
+		System.out.print("Zipcode: ");
 		zipcode = InputUtil.getRequiredInput();
-		System.out.print("Enter Employee Birthdate in format dd/mm/yyyy: ");
+		System.out.print("Employee's Birthdate (dd/mm/yyyy): ");
 		birthdate = InputUtil.getDate();
-		System.out.print("Enter Employee Grade Weighted Average: ");
+		System.out.print("Employee's Grade Weighted Average: ");
 		gradeWeightAverage =  InputUtil.getGrade();
-		System.out.print("Input Y if person is employed, N if not: ");
+		System.out.print("Employee Details: Y if employed, N if not: ");
 		employed = InputUtil.getStatus();
+
 		if (employed == true) {
 			System.out.print("Enter Employee Hire Date in format dd/mm/yyyy: ");
 			hireDate = InputUtil.getDate();
 		} else {
 			try {
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-				hireDate = format.parse("01/01/0001");
+				hireDate = format.parse("12/31/9999");
 			} catch(ParseException pe) {
 				pe.printStackTrace();
 			}
 		}
 
-
 		Address address = new Address(streetNumber, barangay, city, zipcode);
 		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
 
 		Integer rows = EmployeeDAO.addEmployee(employee);
-		System.out.println(rows + " rows added");
+		System.out.println(rows + " Employee added");
 	}
 
 	public static void deleteEmployee() {
 		System.out.println("Delete Employee");
 		Integer rows = EmployeeDAO.showEmployees(1);
-		System.out.print("Choose Employee ID to be deleted: ");
+		System.out.print("Enter the Employee ID to be deleted: ");
 		Integer employeeId = InputUtil.inputOptionCheck();
+		
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}
+
 		EmployeeDAO.employeeDelete(employeeId);
 	}
 
@@ -90,6 +97,12 @@ public class ServiceManagement {
 		Integer rows = EmployeeDAO.showEmployees(1);
 		System.out.print("Choose Employee ID to be updated: ");
 		Integer employeeId = InputUtil.inputOptionCheck();
+		
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}	
+
 		EmployeeDAO.employeeUpdate(employeeId);
 	}
 
@@ -106,8 +119,14 @@ public class ServiceManagement {
 		Integer roleExist;
 
 		System.out.print("Add role to which EmployeeId: ");
-		employeeId = InputUtil.inputOptionCheck(rows);
-		System.out.print("Input the Role to add: ");
+		employeeId = InputUtil.inputOptionCheck();
+
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}
+
+		System.out.print("Input the Role Code to add: ");
 		roleCode = InputUtil.getRequiredInput();
 
 		Roles added = new Roles(" ", roleCode);
@@ -127,7 +146,12 @@ public class ServiceManagement {
 		Integer rows = EmployeeDAO.showEmployees(1);
 		Integer employeeId;
 		System.out.print("Delete the roles of which employee:");
-		employeeId = InputUtil.inputOptionCheck(rows);
+		employeeId = InputUtil.inputOptionCheck();
+
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}
 
 		Integer roleNumber = EmployeeDAO.showEmployeeRoles(employeeId);
 
@@ -140,19 +164,28 @@ public class ServiceManagement {
 		Integer rows = EmployeeDAO.showEmployees(1);
 		Integer employeeId;
 		System.out.print("Show the roles of which EmployeeId: ");
-		employeeId = InputUtil.inputOptionCheck(rows);
+		employeeId = InputUtil.inputOptionCheck();
+
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}		
 
 		Integer roleNumber = EmployeeDAO.showEmployeeRoles(employeeId);
 
 	}
-
 
 	public static void addContactInfo() {
 		Integer rows = EmployeeDAO.showEmployees(1);
 		String infoType;
 
 		System.out.print("Add a contact info to which employee: ");
-		Integer emplId = InputUtil.inputOptionCheck(rows);
+		Integer emplId = InputUtil.inputOptionCheck();
+
+		while (!(EmployeeDAO.employeeCheck(emplId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			emplId = InputUtil.inputOptionCheck();
+		}
 
 		System.out.println("Add Contact Information: ");
 		System.out.println("[1]    Add email");
@@ -179,7 +212,12 @@ public class ServiceManagement {
 		Integer employeeId;
 
 		System.out.print("Delete a contact info from which employee: ");
-		employeeId = InputUtil.inputOptionCheck(rows);
+		employeeId = InputUtil.inputOptionCheck();
+
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}		
 
 		Integer contacts = ContactDAO.employeeContact(employeeId);
 		System.out.print("Choose the ContactID to be deleted");
@@ -193,7 +231,12 @@ public class ServiceManagement {
 		Integer employeeId;
 
 		System.out.print("Update contact info of which employee: ");
-		employeeId = InputUtil.inputOptionCheck(rows);	
+		employeeId = InputUtil.inputOptionCheck();	
+
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}		
 
 		Integer contacts = ContactDAO.employeeContact(employeeId);
 		System.out.print("Choose the ContactID to be updated: ");
@@ -207,7 +250,12 @@ public class ServiceManagement {
 		Integer rows = EmployeeDAO.showEmployees(1);
 		Integer employeeId;
 		System.out.print("Show Contact Information of which EmployeeId: ");
-		employeeId = InputUtil.inputOptionCheck(rows);
+		employeeId = InputUtil.inputOptionCheck();
+
+		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+			System.out.println("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			employeeId = InputUtil.inputOptionCheck();
+		}				
 
 		Integer roleNumber = ContactDAO.employeeContact(employeeId);
 	}
@@ -280,7 +328,3 @@ public class ServiceManagement {
 		}		
 	}
 }
-
-
-
-

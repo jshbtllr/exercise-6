@@ -14,9 +14,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import java.util.Date;
 import java.util.List;
+import java.util.Collections;
 import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.Comparator;
 
 public class EmployeeDAO {
 	public static Integer addEmployee (Employee employee) {
@@ -71,94 +73,86 @@ public class EmployeeDAO {
 
 		try {
 			transaction = session.beginTransaction();
-			hql = "SELECT * FROM EMPLOYEE WHERE Id = :employeeid";
-			query = session.createSQLQuery(hql);
-			query.setParameter("employeeid", employeeId);
 
-			if(!query.list().isEmpty()) {
-				System.out.println("[1]    Full Name");
-				System.out.println("[2]    Address");
-				System.out.println("[3]    Birthday");
-				System.out.println("[4]    GWA");
-				System.out.println("[5]    Employment Status");
-				System.out.print("Choose function above: ");
-				Integer option = InputUtil.inputOptionCheck(5);
+			System.out.println("Update Employee: ");
+			System.out.println("[1]    Full Name");
+			System.out.println("[2]    Address");
+			System.out.println("[3]    Birthday");
+			System.out.println("[4]    GWA");
+			System.out.println("[5]    Employment Status");
+			System.out.print("Choose function above: ");
+			Integer option = InputUtil.inputOptionCheck(5);
 
-				if(option == 1) {
-					System.out.print("Input New First Name: ");
-					String firstName = InputUtil.getRequiredInput();
-					System.out.print("Input New Last Name: ");
-					String lastName = InputUtil.getRequiredInput();
-					System.out.print("Input New Middle Name: ");
-					String middleName = InputUtil.getRequiredInput();
-					System.out.print("Input New Suffix Name: ");
-					String suffix = InputUtil.getRequiredInput();
-					System.out.print("Input New Title Name: ");
-					String title = InputUtil.getRequiredInput();
-					hql = "UPDATE EMPLOYEE SET last_name = :lastname, first_name = :firstname, middle_name = :middlename, " +
-							"suffix = :suffix, title = :title WHERE id = :employeeid";
-					query = session.createSQLQuery(hql);
-					query.setParameter("lastname", lastName);
-					query.setParameter("firstname", firstName);
-					query.setParameter("middlename", middleName);
-					query.setParameter("suffix", suffix);
-					query.setParameter("title", title);
-				} else if(option == 2) {
-					System.out.print("Input New Street Number: ");
-					String streetNumber = InputUtil.getRequiredInput();
-					System.out.print("Input New Barangay: ");
-					String barangay = InputUtil.getRequiredInput();
-					System.out.print("Input New City: ");
-					String city = InputUtil.getRequiredInput();
-					System.out.print("Input New Zipcode: ");
-					String zipcode = InputUtil.getRequiredInput();	
-					hql = "UPDATE EMPLOYEE SET street = :street, barangay = :barangay, " +
-							"city = :city, zipcode = :zipcode WHERE id = :employeeid";					
-					query = session.createSQLQuery(hql);
-					query.setParameter("street", streetNumber);
-					query.setParameter("barangay", barangay);
-					query.setParameter("city", city);
-					query.setParameter("zipcode", zipcode);				
-				} else if (option == 3) {
-					System.out.print("Input New Birthdate (dd/mm/yyyy): ");
-					Date birthday = InputUtil.getDate();
-					hql = "UPDATE EMPLOYEE SET birthday =: date WHERE id = :employeeid";
-					query = session.createSQLQuery(hql);
-					query.setParameter("date", birthday);
-				} else if (option == 4) {
-					System.out.print("Input new GWA: ");
-					Float gwa = InputUtil.getGrade();
-					hql = "UPDATE EMPLOYEE SET gwa = :gwa WHERE id = :employeeid";
-					query = session.createSQLQuery(hql);
-					query.setParameter("gwa", gwa);					
-				} else {
-					System.out.print("Input New Employee Status Y if person is employed, N if not: ");
-					Boolean employed = InputUtil.getStatus();
-					Date hireDate = null;
-					if (employed == true) {
-						System.out.print("Enter Employee Hire Date in format dd/mm/yyyy: ");
-						hireDate = InputUtil.getDate();
-					} else {
-						try {
-							SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-							hireDate = format.parse("01/01/0001");
-						} catch(ParseException pe) {
-							pe.printStackTrace();
-						}
-					}
-					hql = "UPDATE EMPLOYEE SET hire_date = :date, employed = :emp WHERE id = :employeeid";
-					query = session.createSQLQuery(hql);
-					query.setParameter("date", hireDate);	
-					query.setParameter("emp", employed);	
-				}
-
-				query.setParameter("employeeid", employeeId);
-				Integer updated = query.executeUpdate();
-				transaction.commit();
-
+			if(option == 1) {
+				System.out.print("Input New First Name: ");
+				String firstName = InputUtil.getRequiredInput();
+				System.out.print("Input New Last Name: ");
+				String lastName = InputUtil.getRequiredInput();
+				System.out.print("Input New Middle Name: ");
+				String middleName = InputUtil.getRequiredInput();
+				System.out.print("Input New Suffix Name: ");
+				String suffix = InputUtil.getRequiredInput();
+				System.out.print("Input New Title Name: ");
+				String title = InputUtil.getRequiredInput();
+				hql = "UPDATE EMPLOYEE SET last_name = :lastname, first_name = :firstname, middle_name = :middlename, " +
+						"suffix = :suffix, title = :title WHERE id = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("lastname", lastName);
+				query.setParameter("firstname", firstName);
+				query.setParameter("middlename", middleName);
+				query.setParameter("suffix", suffix);
+				query.setParameter("title", title);
+			} else if(option == 2) {
+				System.out.print("Input New Street Number: ");
+				String streetNumber = InputUtil.getRequiredInput();
+				System.out.print("Input New Barangay: ");
+				String barangay = InputUtil.getRequiredInput();
+				System.out.print("Input New City: ");
+				String city = InputUtil.getRequiredInput();
+				System.out.print("Input New Zipcode: ");
+				String zipcode = InputUtil.getRequiredInput();	
+				hql = "UPDATE EMPLOYEE SET street = :street, barangay = :barangay, " +
+						"city = :city, zipcode = :zipcode WHERE id = :employeeid";					
+				query = session.createSQLQuery(hql);
+				query.setParameter("street", streetNumber);
+				query.setParameter("barangay", barangay);
+				query.setParameter("city", city);
+				query.setParameter("zipcode", zipcode);				
+			} else if (option == 3) {
+				System.out.print("Input New Birthdate (dd/mm/yyyy): ");
+				Date birthday = InputUtil.getDate();
+				hql = "UPDATE EMPLOYEE SET birthday =: date WHERE id = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("date", birthday);
+			} else if (option == 4) {
+				System.out.print("Input new GWA: ");
+				Float gwa = InputUtil.getGrade();
+				hql = "UPDATE EMPLOYEE SET gwa = :gwa WHERE id = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("gwa", gwa);					
 			} else {
-				System.out.println("Employee does not exist.");
+				System.out.print("Input New Employee Status Y if person is employed, N if not: ");
+				Boolean employed = InputUtil.getStatus();
+				Date hireDate = null;
+				if (employed == true) {
+					System.out.print("Enter Employee Hire Date in format dd/mm/yyyy: ");
+					hireDate = InputUtil.getDate();
+				} else {
+					try {
+						SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+						hireDate = format.parse("12/31/9999");
+					} catch(ParseException pe) {
+						pe.printStackTrace();
+					}
+				}
+				hql = "UPDATE EMPLOYEE SET hire_date = :date, employed = :emp WHERE id = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("date", hireDate);	
+				query.setParameter("emp", employed);	
 			}
+			query.setParameter("employeeid", employeeId);
+			Integer updated = query.executeUpdate();
+			transaction.commit();
 
 		} catch(HibernateException he) {
 			if (transaction != null)  {
@@ -182,48 +176,38 @@ public class EmployeeDAO {
 
 		try {
 			transaction = session.beginTransaction();
-			hql = "SELECT * FROM EMPLOYEE WHERE Id = :employeeid";
-			query = session.createSQLQuery(hql);
-			query.setParameter("employeeid", employeeId);
 
 			if(!query.list().isEmpty()) {
-				hql = "SELECT * FROM EMPROLE WHERE EmployeeID = :employeeid";
+				hql = "DELETE FROM EMPROLE WHERE EmployeeID = :employeeid";
 				query = session.createSQLQuery(hql);
 				query.setParameter("employeeid", employeeId);
-
-				if(!query.list().isEmpty()) {
-					hql = "DELETE FROM EMPROLE WHERE EmployeeID = :employeeid";
-					query = session.createSQLQuery(hql);
-					query.setParameter("employeeid", employeeId);
-					Integer deletedRows = query.executeUpdate();
-					System.out.println(deletedRows + " employee's roles were deleted");
-				} else {
-					System.out.println("No roles assigned to employee and none deleted.");
-				}
-
-				hql = "SELECT * FROM CONTACTINFO WHERE EmployeeID = :employeeid";
-				query = session.createSQLQuery(hql);
-				query.setParameter("employeeid", employeeId);				
-
-				if(!query.list().isEmpty()) {
-					hql = "DELETE FROM CONTACTINFO WHERE EmployeeID = :employeeid";
-					query = session.createSQLQuery(hql);
-					query.setParameter("employeeid", employeeId);
-					Integer deletedContacts = query.executeUpdate();
-					System.out.println(deletedContacts + " employee's contacts were deleted");
-				} else {
-					System.out.println("No contact info assigned to employee and none deleted.");	
-				}
-
-				hql = "DELETE FROM EMPLOYEE WHERE id = :employeeid";
-				query = session.createSQLQuery(hql);
-				query.setParameter("employeeid", employeeId);
-				Integer deletedEmployee = query.executeUpdate();				
-				System.out.println(deletedEmployee + " Employee Deleted.");
-
+				Integer deletedRows = query.executeUpdate();
+				System.out.println(deletedRows + " employee's roles were deleted");
 			} else {
-				System.out.println("Employee does not exist. No employee deleted");
-			}		
+				System.out.println("No roles assigned to employee and none deleted.");
+			}
+
+			hql = "SELECT * FROM CONTACTINFO WHERE EmployeeID = :employeeid";
+			query = session.createSQLQuery(hql);
+			query.setParameter("employeeid", employeeId);				
+
+			if(!query.list().isEmpty()) {
+				hql = "DELETE FROM CONTACTINFO WHERE EmployeeID = :employeeid";
+				query = session.createSQLQuery(hql);
+				query.setParameter("employeeid", employeeId);
+				Integer deletedContacts = query.executeUpdate();
+				System.out.println(deletedContacts + " employee's contacts were deleted");
+			} else {
+				System.out.println("No contact info assigned to employee and none deleted.");	
+			}
+
+			hql = "DELETE FROM EMPLOYEE WHERE id = :employeeid";
+			query = session.createSQLQuery(hql);
+			query.setParameter("employeeid", employeeId);
+			Integer deletedEmployee = query.executeUpdate();	
+			transaction.commit();			
+			System.out.println(deletedEmployee + " Employee Deleted.");
+
 		} catch(HibernateException he) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -255,21 +239,32 @@ public class EmployeeDAO {
 				query = session.createSQLQuery("FROM ROLES ORDER BY RoleID");	
 			}
 
-			List <Object []>  list = query.list();
-			rows = list.size();
-			for (Object [] employee : list ) {
-				System.out.print("EmployeeID: " + employee[0] + "    FullName: " + employee[5] + " " + employee[1] + ", " + 
-									employee[2] + " " + employee[3] + " " + employee[4] + "    Address: " + employee[6] + " " + 
-									employee[7] + " " + employee[8] + " " + employee[9] + "    Birthday: " + employee[10] +
-									"    Birthday: " + employee[11]);
-
-				if(employee[13].equals(true)) {
-					System.out.print("    Employed: Yes");
-					System.out.println("  Hire Date: " + employee[12]);
-				} else {
-					System.out.println("    Employed: No");
-					System.out.println("  Hire Date: " + "N/A");
+			if(!query.list().isEmpty()) {
+				List <Object []>  list = query.list();
+				if(order == 2) {
+					Collections.sort(list, new gwaComparator());
 				}
+
+				rows = list.size();
+				for (Object [] employee : list ) {
+					System.out.println("EmployeeID: " + employee[0]);
+					System.out.println("FullName:   " + employee[5] + " " + employee[1] + ", " + employee[2] + " " + employee[3] + " " + employee[4]);
+					System.out.println("Address:    " + employee[6] + " " + employee[7] + " " + employee[8] + " " + employee[9]);
+					System.out.println("Birthday:   " + employee[10]);
+					System.out.println("GWA:        " + employee[11]);
+
+
+					if(employee[13].equals(true)) {
+						System.out.println("Employed:   Yes");
+						System.out.println("Hire Date:  " + employee[12]);
+					} else {
+						System.out.println("Employed:   No");
+						System.out.println("Hire Date:  " + "N/A");
+					}
+					System.out.println("-------------------------------------------------------------------\n");
+				}
+			} else {
+				System.out.println("No employees registered.");
 			}
 
 		} catch(HibernateException he) {
@@ -355,7 +350,9 @@ public class EmployeeDAO {
 
 			if (roleNumber > 0) {
 				for(Object [] roles : list) {
-					System.out.println("RoleCode: " + roles[1] + "    RoleName:" + roles[2]);
+					System.out.println("RoleCode: " + roles[1]);
+					System.out.println("RoleName: " + roles[2]);
+					System.out.println("------------------------------");
 				}
 			} else {
 				System.out.println("None");
@@ -415,4 +412,43 @@ public class EmployeeDAO {
 		return roleDelete;
 	}
 
+	public static Boolean employeeCheck(Integer employeeId) {
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		String hql = new String();
+		Query query = null;
+		Boolean present = false;
+
+		try {
+			transaction = session.beginTransaction();
+			hql = "SELECT A.id FROM EMPLOYEE A WHERE id = :employeeid";
+			query = session.createSQLQuery(hql);
+			query.setParameter("employeeid", employeeId);
+
+			if(query.list().isEmpty()) {
+				present = false;
+			} else {
+				present = true;
+			}
+		} catch(HibernateException he) {
+			if (transaction != null)  {
+				transaction.rollback();
+			}
+			System.out.println("Error occurred");
+			he.printStackTrace();
+		} finally {
+			session.close();
+			HibernateUtil.shutdown(sessionFactory);
+		}
+
+		return present;
+	}
+
+}
+
+class gwaComparator implements Comparator <Object []> {
+	public int compare(Object [] a, Object [] b) {
+		return (Float) a[11] < (Float) b[11] ? -1 : a[11] == b[11] ? 0 : 1;
+	}
 }

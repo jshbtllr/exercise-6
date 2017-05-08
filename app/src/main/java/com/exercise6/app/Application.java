@@ -3,12 +3,17 @@ import java.util.Scanner;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.service.ServiceManagement;
 import com.exercise6.core.model.Roles;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class Application {
 	public static void main (String [] args) {
 		Boolean exit = false;
 		Boolean subFunctionFlag = false;
 		String function = new String();
+		Integer rows;
+		org.jboss.logging.Logger logger = org.jboss.logging.Logger.getLogger("org.hibernate");
+		Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
 		while(!exit) {
 			System.out.println("\nEmployee Database");
@@ -29,7 +34,6 @@ public class Application {
 
 			switch (function) {
 				case "1":
-					System.out.println("Create a new employee");
 					ServiceManagement.createEmployee();
 					break;
 				case "2":
@@ -41,27 +45,19 @@ public class Application {
 				case "4":
 					Integer sortFunction;
 					System.out.println("Employee List sorted by: ");
+					System.out.println("[1]    Last Name");
+					System.out.println("[2]    General Weighted Average");
+					System.out.println("[3]    Date Hired");
+					System.out.print("Choose corresponding number to sort: ");
 
-					while (!subFunctionFlag) {
-						System.out.println("[1]    Last Name");
-						System.out.println("[2]    General Weighted Average");
-						System.out.println("[3]    Date Hired");
-						System.out.println("[4]    Exit");
-						System.out.print("Choose corresponding number to sort: ");
-
-						sortFunction = InputUtil.inputOptionCheck(4);
-						if (sortFunction == 4) {
-							break;
-						}
-						Integer rows = ServiceManagement.listEmployees(sortFunction);
-
-						System.out.println(rows + " Employees retrieved");
-					}
+					sortFunction = InputUtil.inputOptionCheck(3);
+					rows = ServiceManagement.listEmployees(sortFunction);
+					System.out.println(rows + " Employees retrieved");
 
 					break;
 				case "5":
 					String employeeRoleFunction = new String();
-					System.out.println("Add or Remove Roles assigned to an Employee");
+					System.out.println("Manage Employee's Roles");
 
 					while (!subFunctionFlag) {
 						System.out.println("[1]    Add Roles to Employee");
@@ -84,7 +80,7 @@ public class Application {
 								break;
 							case "4":
 								subFunctionFlag = true;
-								System.out.println("Exit Add or Remove Roles assigned");
+								System.out.println("Exit");
 								break;
 							default:
 								System.out.println("\nInvalid Function, choose another function below:");
@@ -94,7 +90,7 @@ public class Application {
 					break;
 				case "6":
 					String contactInfoFunction = new String();
-					System.out.println("Contact Information Management");
+					System.out.println("Manage Employee's Contact Information");
 
 					while(!subFunctionFlag) {
 						System.out.println("[1]    Add Contact Information");
@@ -121,14 +117,12 @@ public class Application {
 								break;
 							case "5":
 								subFunctionFlag = true;
-								System.out.println("Exit Contact Information Management");
+								System.out.println("Exit");
 								break;
 							default:
 								System.out.println("\nInvalid Function, choose another function below:");
 								break;
 						}
-					System.out.println("\nSelect Contact Info Management Option above:");
-
 					}
 
 					break;
@@ -171,7 +165,7 @@ public class Application {
 								break;
 							case "3":
 								System.out.println("Update Roles");
-								Integer rows = ServiceManagement.listRoles(1);
+								rows = ServiceManagement.listRoles(1);
 								System.out.print("\nChoose the role id of the role to edit: ");
 								Integer roleId = InputUtil.inputOptionCheck(rows);
 

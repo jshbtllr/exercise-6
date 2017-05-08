@@ -27,12 +27,6 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${commons-dependency-version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>com.exercise6.app</groupId>
 				<artifactId>app</artifactId>
 				<version>${project.version}</version>
@@ -59,7 +53,7 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>${hibernate-dependency-version}</version>
+				<version>${hibernate-dependency-version}</version>			
 			</dependency>
 
 			<dependency>
