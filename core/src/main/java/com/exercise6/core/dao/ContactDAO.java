@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class ContactDAO {
-	public static void addContact(SessionFactory sessionFactory, ContactInfo contact, Integer employeeId) {
+	public static void addContact(SessionFactory sessionFactory, ContactInfo contact, Long employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -42,7 +42,7 @@ public class ContactDAO {
 		}	
 	}
 
-	public static void updateContact(SessionFactory sessionFactory, Integer contactId, Integer employeeId) {
+	public static void updateContact(SessionFactory sessionFactory, Integer contactId, Long employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -81,7 +81,7 @@ public class ContactDAO {
 
 	}	
 
-	public static void deleteContact(SessionFactory sessionFactory, Integer contactId, Integer employeeId) {
+	public static void deleteContact(SessionFactory sessionFactory, Integer contactId, Long employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -118,7 +118,7 @@ public class ContactDAO {
 
 	}
 
-	public static Integer employeeContact(SessionFactory sessionFactory, Integer employeeId) {
+	public static Integer employeeContact(SessionFactory sessionFactory, Long employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();

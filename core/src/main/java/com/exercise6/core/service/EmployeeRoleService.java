@@ -18,13 +18,13 @@ import org.hibernate.SessionFactory;
 
 public class EmployeeRoleService {
 	public static void addEmployeeRoles(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
-		Integer employeeId;
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Long employeeId;
 		String roleCode;
 		Integer roleExist;
 
 		System.out.print("Add role to which EmployeeId: ");
-		employeeId = InputUtil.inputOptionCheck();
+		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		System.out.println("");
 		Integer listRoles = RoleDAO.showRoles(sessionFactory, 1);
@@ -32,7 +32,7 @@ public class EmployeeRoleService {
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}
 
 		System.out.print("Input the Role Code to add: ");
@@ -51,14 +51,14 @@ public class EmployeeRoleService {
 	} 
 
 	public static void removeEmployeeRoles(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
-		Integer employeeId;
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Long employeeId;
 		System.out.print("Delete the roles of which employee:");
-		employeeId = InputUtil.inputOptionCheck();
+		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}
 
 		Integer roleNumber = EmployeeDAO.showEmployeeRoles(sessionFactory, employeeId);
@@ -69,14 +69,14 @@ public class EmployeeRoleService {
 	} 
 
 	public static void listEmployeeRoles(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
-		Integer employeeId;
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Long employeeId;
 		System.out.print("Show the roles of which EmployeeId: ");
-		employeeId = InputUtil.inputOptionCheck();
+		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}		
 
 		Integer roleNumber = EmployeeDAO.showEmployeeRoles(sessionFactory, employeeId);

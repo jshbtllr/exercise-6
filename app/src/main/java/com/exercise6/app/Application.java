@@ -52,12 +52,13 @@ public class Application {
 					System.out.println("[1]    Last Name");
 					System.out.println("[2]    General Weighted Average");
 					System.out.println("[3]    Date Hired");
-					System.out.print("Choose corresponding number to sort: ");
+					System.out.print("Input Sort Type: ");
 
 					sortFunction = InputUtil.inputOptionCheck(3);
-					System.out.println("\nOrder: ")
+					System.out.println("\nOrder: ");
 					System.out.println("[1]    Ascending");
-					System.out.println("[2]    Descending");		
+					System.out.println("[2]    Descending");	
+					System.out.print("Input Sort order: ");	
 					orderFunction = InputUtil.inputOptionCheck(2);
 
 					rows = EmployeeService.listEmployees(sessionFactory, sortFunction, orderFunction);

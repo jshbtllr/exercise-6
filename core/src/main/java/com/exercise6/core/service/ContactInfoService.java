@@ -18,15 +18,15 @@ import org.hibernate.SessionFactory;
 
 public class ContactInfoService {
 	public static void addContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
 		String infoType;
 
 		System.out.print("Add a contact info to which employee: ");
-		Integer emplId = InputUtil.inputOptionCheck();
+		Long emplId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, emplId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			emplId = InputUtil.inputOptionCheck();
+			emplId = InputUtil.inputOptionCheck().longValue();
 		}
 
 		System.out.println("Add Contact Information: ");
@@ -50,15 +50,15 @@ public class ContactInfoService {
 	}
 
 	public static void removeContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
-		Integer employeeId;
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Long employeeId;
 
 		System.out.print("Delete a contact info from which employee: ");
-		employeeId = InputUtil.inputOptionCheck();
+		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}		
 
 		Integer contacts = ContactDAO.employeeContact(sessionFactory, employeeId);
@@ -69,15 +69,15 @@ public class ContactInfoService {
 	}
 
 	public static void updateContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
-		Integer employeeId;
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Long employeeId;
 
 		System.out.print("Update contact info of which employee: ");
-		employeeId = InputUtil.inputOptionCheck();	
+		employeeId = InputUtil.inputOptionCheck().longValue();	
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}		
 
 		Integer contacts = ContactDAO.employeeContact(sessionFactory, employeeId);
@@ -89,14 +89,14 @@ public class ContactInfoService {
 	}
 
 	public static void listContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
-		Integer employeeId;
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Long employeeId;
 		System.out.print("Show Contact Information of which EmployeeId: ");
-		employeeId = InputUtil.inputOptionCheck();
+		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}				
 
 		Integer roleNumber = ContactDAO.employeeContact(sessionFactory, employeeId);

@@ -81,34 +81,105 @@ public class EmployeeService {
 
 	public static void deleteEmployee(SessionFactory sessionFactory) {
 		System.out.println("Delete Employee");
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
 		System.out.print("Enter the Employee ID to be deleted: ");
-		Integer employeeId = InputUtil.inputOptionCheck();
+		Long employeeId = InputUtil.inputOptionCheck().longValue();
 		
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}
 
 		EmployeeDAO.employeeDelete(sessionFactory, employeeId);
 	}
 
 	public static void updateEmployee(SessionFactory sessionFactory) {
+		String lastName = new String();
+		String firstName = new String();
+		String middleName = new String();
+		String suffix = new String();
+		String title = new String();
+		String streetNumber = new String();
+		String barangay = new String();
+		String city = new String();
+		String zipcode = new String();
+		Date birthdate = null;
+		Date hireDate = null;
+		Float gradeWeightAverage = new Float(0.0f);
+		Boolean employed = false;
+		Set <ContactInfo> contacts = new HashSet <ContactInfo>();
+		Set <Roles> role = new HashSet <Roles>();
+
 		System.out.println("Update Employee");
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
 		System.out.print("Choose Employee ID to be updated: ");
-		Integer employeeId = InputUtil.inputOptionCheck();
+		Long employeeId = InputUtil.inputOptionCheck().longValue();
 		
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck();
+			employeeId = InputUtil.inputOptionCheck().longValue();
 		}	
 
-		EmployeeDAO.employeeUpdate(sessionFactory, employeeId);
+		System.out.println("Update Employee: ");
+		System.out.println("[1]    Full Name");
+		System.out.println("[2]    Address");
+		System.out.println("[3]    Birthday");
+		System.out.println("[4]    GWA");
+		System.out.println("[5]    Employment Status");
+		System.out.print("Choose information to edit: ");
+		Integer option = InputUtil.inputOptionCheck(5);		
+
+		if(option == 1) {
+			System.out.print("Input New First Name: ");
+			firstName = InputUtil.getRequiredInput();
+			System.out.print("Input New Last Name: ");
+			lastName = InputUtil.getRequiredInput();
+			System.out.print("Input New Middle Name: ");
+			middleName = InputUtil.getRequiredInput();
+			System.out.print("Input New Suffix Name (optional): ");
+			suffix = InputUtil.getOptionalInput();
+			System.out.print("Input New Title Name (optional): ");
+			title = InputUtil.getOptionalInput();
+		} else if(option == 2) {
+			System.out.print("Input New Street Number: ");
+			streetNumber = InputUtil.getRequiredInput();
+			System.out.print("Input New Barangay: ");
+			barangay = InputUtil.getRequiredInput();
+			System.out.print("Input New City: ");
+			city = InputUtil.getRequiredInput();
+			System.out.print("Input New Zipcode: ");
+			zipcode = InputUtil.getRequiredInput();	
+		} else if (option == 3) {
+			System.out.print("Input New Birthdate (dd/mm/yyyy): ");
+			birthdate = InputUtil.getDate();
+		} else if (option == 4) {
+			System.out.print("Input new GWA: ");
+			gradeWeightAverage = InputUtil.getGrade();
+		} else {
+			System.out.print("Input New Employee Status Y if person is employed, N if not: ");
+			employed = InputUtil.getStatus();
+			hireDate = null;
+			if (employed == true) {
+				System.out.print("Enter Employee Hire Date in format dd/mm/yyyy: ");
+				hireDate = InputUtil.getDate();
+			} else {
+				try {
+					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+					hireDate = format.parse("12/31/9999");
+				} catch(ParseException pe) {
+					pe.printStackTrace();
+				}
+			}	
+		}
+
+		Address address = new Address(streetNumber, barangay, city, zipcode);
+		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
+
+		EmployeeDAO.employeeUpdate(sessionFactory, employeeId, employee, option);
 	}
 
-	public static Integer listEmployees(SessionFactory sessionFactory, Integer ruleOrder) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, ruleOrder);
+	public static Integer listEmployees(SessionFactory sessionFactory, Integer sortFunction, Integer orderFunction) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, sortFunction, orderFunction);
 		
 		return rows;
 	}
