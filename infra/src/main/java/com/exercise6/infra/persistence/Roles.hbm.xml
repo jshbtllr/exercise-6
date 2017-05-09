@@ -4,14 +4,14 @@
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-	<class name="com.exercise6.core.model.Roles" table="ROLES">
+	<class name="com.exercise6.core.model.Roles" table="roles">
 		<meta attribute="class-description">
 			Class-Table mapping contains all Role details.
 		</meta>
-		<id name="roleId" type="int" column="RoleID">
+		<id name="id" type="long" column="roleid">
 			<generator class="increment"/>
 		</id>
-		<property name="roleCode" column="RoleCode" type="string"/>
-		<property name="roleName" column="RoleName" type="string"/>
+		<property name="roleCode" column="rolecode" type="string"/>
+		<property name="roleName" column="rolename" type="string"/>
 	</class>
 </hibernate-mapping>

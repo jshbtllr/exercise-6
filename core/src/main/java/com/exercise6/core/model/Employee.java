@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.Date;
 
 public class Employee {
-	private Integer employeeId;
+	private Long id;
 	private String lastName;
 	private String firstName;
 	private String middleName;
@@ -36,8 +36,8 @@ public class Employee {
 		this.role = role;
 	}
 
-	public Integer getEmployeeId() {
-		return this.employeeId;
+	public Long getId() {
+		return this.id;
 	}
 
 	public String getLastName() {
@@ -88,8 +88,8 @@ public class Employee {
 		return this.role;
 	}
 
-	public void setEmployeeId(Integer input) {
-		this.employeeId = input;
+	public void setId(Long input) {
+		this.id = input;
 	}
 
 	public void setLastName(String input) {

@@ -1,7 +1,10 @@
 package com.exercise6.app;
 import java.util.Scanner;
 import com.exercise6.util.InputUtil;
-import com.exercise6.core.service.ServiceManagement;
+import com.exercise6.core.service.EmployeeService;
+import com.exercise6.core.service.RoleService;
+import com.exercise6.core.service.ContactInfoService;
+import com.exercise6.core.service.EmployeeRoleService;
 import com.exercise6.core.model.Roles;
 import com.exercise6.util.HibernateUtil;
 import org.hibernate.SessionFactory;
@@ -14,8 +17,6 @@ public class Application {
 		Boolean subFunctionFlag = false;
 		String function = new String();
 		Integer rows;
-		org.jboss.logging.Logger logger = org.jboss.logging.Logger.getLogger("org.hibernate");
-		Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
 		while(!exit) {
@@ -33,28 +34,33 @@ public class Application {
 
 			function = InputUtil.getRequiredInput();
 
-			System.out.println("");
-
 			switch (function) {
 				case "1":
-					ServiceManagement.createEmployee(sessionFactory);
+					EmployeeService.createEmployee(sessionFactory);
 					break;
 				case "2":
-					ServiceManagement.deleteEmployee(sessionFactory);
+					EmployeeService.deleteEmployee(sessionFactory);
 					break;
 				case "3":
-					ServiceManagement.updateEmployee(sessionFactory);
+					EmployeeService.updateEmployee(sessionFactory);
 					break;
 				case "4":
 					Integer sortFunction;
-					System.out.println("Employee List sorted by: ");
+					Integer orderFunction;
+
+					System.out.println("\nEmployee List sorted by: ");
 					System.out.println("[1]    Last Name");
 					System.out.println("[2]    General Weighted Average");
 					System.out.println("[3]    Date Hired");
 					System.out.print("Choose corresponding number to sort: ");
 
 					sortFunction = InputUtil.inputOptionCheck(3);
-					rows = ServiceManagement.listEmployees(sessionFactory, sortFunction);
+					System.out.println("\nOrder: ")
+					System.out.println("[1]    Ascending");
+					System.out.println("[2]    Descending");		
+					orderFunction = InputUtil.inputOptionCheck(2);
+
+					rows = EmployeeService.listEmployees(sessionFactory, sortFunction, orderFunction);
 					System.out.println(rows + " Employees retrieved");
 
 					break;
@@ -73,13 +79,13 @@ public class Application {
 
 						switch (employeeRoleFunction) {
 							case "1":
-								ServiceManagement.addEmployeeRoles(sessionFactory);
+								EmployeeRoleService.addEmployeeRoles(sessionFactory);
 								break;
 							case "2":
-								ServiceManagement.removeEmployeeRoles(sessionFactory);
+								EmployeeRoleService.removeEmployeeRoles(sessionFactory);
 								break;
 							case "3":
-								ServiceManagement.listEmployeeRoles(sessionFactory);
+								EmployeeRoleService.listEmployeeRoles(sessionFactory);
 								break;
 							case "4":
 								subFunctionFlag = true;
@@ -107,16 +113,16 @@ public class Application {
 
 						switch (contactInfoFunction) {
 							case "1":
-								ServiceManagement.addContactInfo(sessionFactory);
+								ContactInfoService.addContactInfo(sessionFactory);
 								break;
 							case "2":
-								ServiceManagement.removeContactInfo(sessionFactory);
+								ContactInfoService.removeContactInfo(sessionFactory);
 								break;
 							case "3":
-								ServiceManagement.updateContactInfo(sessionFactory);
+								ContactInfoService.updateContactInfo(sessionFactory);
 								break;
 							case "4":
-								ServiceManagement.listContactInfo(sessionFactory);
+								ContactInfoService.listContactInfo(sessionFactory);
 								break;
 							case "5":
 								subFunctionFlag = true;
@@ -154,7 +160,7 @@ public class Application {
 								roleName = InputUtil.getRequiredInput();
 								Roles addedRole = new Roles(roleName, roleCode);		
 														
-								ServiceManagement.addRoles(sessionFactory, addedRole);
+								RoleService.addRoles(sessionFactory, addedRole);
 								break;
 							case "2":
 								System.out.println("Deleting Role with the below information:");
@@ -164,11 +170,11 @@ public class Application {
 								roleName = InputUtil.getRequiredInput();
 								Roles deletedRole = new Roles(roleName, roleCode);
 
-								ServiceManagement.removeRoles(sessionFactory, deletedRole);
+								RoleService.removeRoles(sessionFactory, deletedRole);
 								break;
 							case "3":
 								System.out.println("Update Roles");
-								rows = ServiceManagement.listRoles(sessionFactory, 1);
+								rows = RoleService.listRoles(sessionFactory, 1);
 								System.out.print("\nChoose the role id of the role to edit: ");
 								Integer roleId = InputUtil.inputOptionCheck(rows);
 
@@ -178,7 +184,7 @@ public class Application {
 								System.out.println("[3]    Both");
 								System.out.print("Choose Option above: ");
 								Integer option = InputUtil.inputOptionCheck(3);
-								ServiceManagement.updateRoles(sessionFactory, roleId, option);
+								RoleService.updateRoles(sessionFactory, roleId, option);
 
 								break;
 							case "4":
@@ -188,7 +194,7 @@ public class Application {
 								System.out.println("[3]    by RoleName");
 								System.out.print("Choose order rule from above: ");
 								Integer orderRule = InputUtil.inputOptionCheck(3);
-								Integer out = ServiceManagement.listRoles(sessionFactory, orderRule);
+								Integer out = RoleService.listRoles(sessionFactory, orderRule);
 								System.out.println(out + " rows printed");
 								break;
 							case "5":

@@ -2,7 +2,7 @@ package com.exercise6.core.model;
 
 public class ContactInfo {
 	
-	private Integer contactId;
+	private Long id;
 	private String infoType;
 	private String infoDetail;
 
@@ -12,8 +12,8 @@ public class ContactInfo {
 		this.infoDetail = infoDetail;
 	}
 
-	public Integer getContactId() {
-		return this.contactId;
+	public Long getId() {
+		return this.id;
 	}
 
 	public String getInfoType() {
@@ -24,8 +24,8 @@ public class ContactInfo {
 		return this.infoDetail;
 	}
 
-	public void setContactId(Integer input) {
-		this.contactId = input;
+	public void setId(Long input) {
+		this.id = input;
 	}
 
 	public void setInfoType(String input) {

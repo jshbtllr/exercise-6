@@ -2,7 +2,7 @@ package com.exercise6.core.model;
 
 public class Address {
 	
-	private Integer addressId;
+	private Long id;
 	private String streetNumber;
 	private String barangay;
 	private String city;
@@ -16,8 +16,8 @@ public class Address {
 		this.zipcode = zipcode;
 	}
 
-	private Integer getAddressId() {
-		return this.addressId;
+	private Long getId() {
+		return this.id;
 	}
 
 	public String getStreetNumber() {
@@ -36,8 +36,8 @@ public class Address {
 		return this.zipcode;
 	}
 
-	public void setAddressId(Integer input) {
-		this.addressId = input;
+	public void setId(Long input) {
+		this.id = input;
 	}
 
 	public void setStreetNumber(String input) {

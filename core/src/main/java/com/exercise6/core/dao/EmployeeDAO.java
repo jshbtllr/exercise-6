@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import java.util.Date;
@@ -216,7 +217,7 @@ public class EmployeeDAO {
 
 	}
 
-	public static Integer showEmployees(SessionFactory sessionFactory, Integer order) {
+	public static Integer showEmployees(SessionFactory sessionFactory, Integer sort, Integer order) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Query query;
@@ -225,8 +226,32 @@ public class EmployeeDAO {
 		try {
 			transaction = session.beginTransaction();
 
-			if(order == 1) {
-				query = session.createSQLQuery("SELECT * FROM EMPLOYEE ORDER BY Last_Name");	
+			Criteria criteria = session.createCriteria(Employee.class);
+
+			if(sort == 1) {
+				if(order == 1) {
+					criteria.addOrder(Order.asc("lastName"));
+				} else {
+					criteria.addOrder(Order.desc("lastName"));
+				}
+			} else if (sort == 3) {
+				if (order == 1) {
+					criteria.addOrder(Order.asc("hireDate"));
+				} else {
+					criteria.addOrder(Order.desc("hireDate"));
+				}
+			}
+
+			List <Employee> employees = criteria.list();	
+			
+
+			for (Employee list : employees) {
+				System.out.println("Employees: " + list.getFirstName());
+			}
+
+
+/*			if(order == 1) {
+				query = session.createSQLQuery("SELECT * FROM EMPLOYEE ORDER BY LASTNAME");	
 			} else if(order == 2) {
 				query = session.createSQLQuery("SELECT * FROM EMPLOYEE ORDER BY Last_Name");
 			} else if(order == 3) {
@@ -262,7 +287,7 @@ public class EmployeeDAO {
 				}
 			} else {
 				System.out.println("No employees registered.");
-			}
+			}*/
 
 		} catch(HibernateException he) {
 			if (transaction != null) {

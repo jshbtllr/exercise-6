@@ -2,7 +2,7 @@ package com.exercise6.core.model;
 
 public class Roles {
 	
-	private Integer roleId;
+	private Long id;
 	private String roleName;
 	private String roleCode;
 
@@ -12,8 +12,8 @@ public class Roles {
 		this.roleCode = roleCode;
 	}
 
-	public Integer getRoleId() {
-		return this.roleId;
+	public Long getId() {
+		return this.id;
 	}
 
 	public String getRoleName() {
@@ -24,8 +24,8 @@ public class Roles {
 		return this.roleCode;
 	}
 
-	public void setRoleId(Integer input) {
-		this.roleId = input;
+	public void setId(Long input) {
+		this.id = input;
 	}
 
 	public void setRoleName(String input) {

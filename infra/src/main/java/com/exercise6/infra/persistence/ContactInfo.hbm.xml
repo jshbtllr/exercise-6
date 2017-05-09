@@ -8,10 +8,10 @@
 		<meta attribute="class-description">
 			Class-Table mapping contains all contact info details of employees.
 		</meta>
-		<id name="contactId" type="int" column="ContactID">
+		<id name="id" type="long" column="contactid">
 			<generator class="increment"/>
 		</id>
-		<property name="infoType" column="ContactInfoType" type="string"/>
-		<property name="infoDetail" column="ContactInformation" type="string"/>
+		<property name="infoType" column="contactinfotype" type="string"/>
+		<property name="infoDetail" column="contactinformation" type="string"/>
 	</class>
 </hibernate-mapping>

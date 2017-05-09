@@ -8,31 +8,31 @@
 		<meta attribute="class-description">
 			Class-Table mapping contains all employee details.
 		</meta>
-		<id name="employeeId" type="int" column="ID">
+		<id name="id" type="long" column="employeeid">
 			<generator class="increment"/>
 		</id>
-		<property name="lastName" column="Last_Name" type="string"/>
-		<property name="firstName" column="First_Name" type="string"/>
-		<property name="middleName" column="Middle_Name" type="string"/>
-		<property name="suffix" column="Suffix" type="string"/>
-		<property name="title" column="Title" type="string"/>
+		<property name="lastName" column="lastname" type="string"/>
+		<property name="firstName" column="firstname" type="string"/>
+		<property name="middleName" column="middlename" type="string"/>
+		<property name="suffix" column="suffix" type="string"/>
+		<property name="title" column="title" type="string"/>
 		<component name="address" class="com.exercise6.core.model.Address">
-			<property name="streetNumber" column="Street" type="string"/>
-			<property name="barangay" column="Barangay" type="string"/>
-			<property name="city" column="City" type="string"/>
-			<property name="zipcode" column="Zipcode" type="string"/>
+			<property name="streetNumber" column="street" type="string"/>
+			<property name="barangay" column="barangay" type="string"/>
+			<property name="city" column="city" type="string"/>
+			<property name="zipcode" column="zipcode" type="string"/>
 		</component>
-		<property name="birthday" column="Birthday" type="date"/>
-		<property name="gradeWeightAverage" column="GWA" type="float"/>
-		<property name="hireDate" column="Hire_Date" type="date"/>
-		<property name="employed" column="Employed" type="boolean"/>
+		<property name="birthday" column="birthday" type="date"/>
+		<property name="gradeWeightAverage" column="gwa" type="float"/>
+		<property name="hireDate" column="hiredate" type="date"/>
+		<property name="employed" column="employed" type="boolean"/>
 		<set name="contactInfo" cascade="save-update">
-			<key column="EmployeeID"/>
+			<key column="employeeid"/>
 			<one-to-many class="com.exercise6.core.model.ContactInfo"/>
 		</set>
-		<set name="role" cascade="save-update" table="EMPROLE">
-			<key column="EmployeeID"/>
-			<many-to-many column="RoleID" class="com.exercise6.core.model.Roles"/>
+		<set name="role" cascade="save-update" table="employeerole">
+			<key column="employeeid"/>
+			<many-to-many column="roleid" class="com.exercise6.core.model.Roles"/>
 		</set>
 	</class>
 </hibernate-mapping>

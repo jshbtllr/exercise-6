@@ -1,39 +1,41 @@
-create table EMPLOYEE (
-	id INT NOT NULL auto_increment,
-	Last_Name VARCHAR(50) NOT NULL,
-	First_Name VARCHAR(50) NOT NULL,
-	Middle_Name VARCHAR(50) default NULL,
-	Suffix VARCHAR(10) default NULL,
-	Title VARCHAR(20) default NULL,
-	Street VARCHAR(100) default NULL,
-	Barangay VARCHAR(50) default NULL,
-	City VARCHAR(30) default NULL,
-	Zipcode VARCHAR(10) default NULL,
-	Birthday DATE,
-	GWA FLOAT(8),
-	Hire_Date DATE,
-	Employed BIT(1),
+CREATE DATABASE ERS;
+
+create table employee (
+	employeeid BIGINT NOT NULL auto_increment,
+	lastname VARCHAR(50) NOT NULL,
+	firstname VARCHAR(50) NOT NULL,
+	middlename VARCHAR(50) default NULL,
+	suffix VARCHAR(30) default NULL,
+	title VARCHAR(30) default NULL,
+	street VARCHAR(100) default NULL,
+	barangay VARCHAR(50) default NULL,
+	city VARCHAR(30) default NULL,
+	zipcode VARCHAR(30) default NULL,
+	birthday DATE,
+	gwa FLOAT(8),
+	hiredate DATE,
+	employed BIT(1),
 	PRIMARY KEY (id)
 );
 
-create table EMPROLE (
-	EmployeeID INT NOT NULL,
-	RoleID INT NOT NULL,
+create table employeerole (
+	employeeid INT NOT NULL,
+	roleid INT NOT NULL,
 	PRIMARY KEY (EmployeeID, RoleID)
 );
 
-create table ROLES (
-	RoleID INT NOT NULL auto_increment,
-	RoleCode VARCHAR(10) NOT NULL,
-	RoleName VARCHAR(50) NOT NULL,
+create table roles (
+	roleid INT NOT NULL auto_increment,
+	rolecode VARCHAR(10) NOT NULL,
+	rolename VARCHAR(50) NOT NULL,
 	PRIMARY KEY (RoleID)
 );
 
-create table CONTACTINFO (
-	ContactID INT NOT NULL auto_increment,
-	ContactInfoType VARCHAR(10) NOT NULL,
-	ContactInformation VARCHAR(100) NOT NULL,
-	EmployeeID INT NOT NULL,
+create table contactinfo (
+	contactid INT NOT NULL auto_increment,
+	contactinfotype VARCHAR(30) NOT NULL,
+	contactinformation VARCHAR(100) NOT NULL,
+	EmployeeID INT NOT NULL REFERENCES employee,
 	PRIMARY KEY (ContactID)
 );
 
