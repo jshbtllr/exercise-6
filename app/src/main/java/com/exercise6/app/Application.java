@@ -3,6 +3,8 @@ import java.util.Scanner;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.service.ServiceManagement;
 import com.exercise6.core.model.Roles;
+import com.exercise6.util.HibernateUtil;
+import org.hibernate.SessionFactory;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -14,6 +16,7 @@ public class Application {
 		Integer rows;
 		org.jboss.logging.Logger logger = org.jboss.logging.Logger.getLogger("org.hibernate");
 		Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
 		while(!exit) {
 			System.out.println("\nEmployee Database");
@@ -34,13 +37,13 @@ public class Application {
 
 			switch (function) {
 				case "1":
-					ServiceManagement.createEmployee();
+					ServiceManagement.createEmployee(sessionFactory);
 					break;
 				case "2":
-					ServiceManagement.deleteEmployee();
+					ServiceManagement.deleteEmployee(sessionFactory);
 					break;
 				case "3":
-					ServiceManagement.updateEmployee();
+					ServiceManagement.updateEmployee(sessionFactory);
 					break;
 				case "4":
 					Integer sortFunction;
@@ -51,7 +54,7 @@ public class Application {
 					System.out.print("Choose corresponding number to sort: ");
 
 					sortFunction = InputUtil.inputOptionCheck(3);
-					rows = ServiceManagement.listEmployees(sortFunction);
+					rows = ServiceManagement.listEmployees(sessionFactory, sortFunction);
 					System.out.println(rows + " Employees retrieved");
 
 					break;
@@ -70,13 +73,13 @@ public class Application {
 
 						switch (employeeRoleFunction) {
 							case "1":
-								ServiceManagement.addEmployeeRoles();
+								ServiceManagement.addEmployeeRoles(sessionFactory);
 								break;
 							case "2":
-								ServiceManagement.removeEmployeeRoles();
+								ServiceManagement.removeEmployeeRoles(sessionFactory);
 								break;
 							case "3":
-								ServiceManagement.listEmployeeRoles();
+								ServiceManagement.listEmployeeRoles(sessionFactory);
 								break;
 							case "4":
 								subFunctionFlag = true;
@@ -104,16 +107,16 @@ public class Application {
 
 						switch (contactInfoFunction) {
 							case "1":
-								ServiceManagement.addContactInfo();
+								ServiceManagement.addContactInfo(sessionFactory);
 								break;
 							case "2":
-								ServiceManagement.removeContactInfo();
+								ServiceManagement.removeContactInfo(sessionFactory);
 								break;
 							case "3":
-								ServiceManagement.updateContactInfo();
+								ServiceManagement.updateContactInfo(sessionFactory);
 								break;
 							case "4":
-								ServiceManagement.listContactInfo();
+								ServiceManagement.listContactInfo(sessionFactory);
 								break;
 							case "5":
 								subFunctionFlag = true;
@@ -151,7 +154,7 @@ public class Application {
 								roleName = InputUtil.getRequiredInput();
 								Roles addedRole = new Roles(roleName, roleCode);		
 														
-								ServiceManagement.addRoles(addedRole);
+								ServiceManagement.addRoles(sessionFactory, addedRole);
 								break;
 							case "2":
 								System.out.println("Deleting Role with the below information:");
@@ -161,11 +164,11 @@ public class Application {
 								roleName = InputUtil.getRequiredInput();
 								Roles deletedRole = new Roles(roleName, roleCode);
 
-								ServiceManagement.removeRoles(deletedRole);
+								ServiceManagement.removeRoles(sessionFactory, deletedRole);
 								break;
 							case "3":
 								System.out.println("Update Roles");
-								rows = ServiceManagement.listRoles(1);
+								rows = ServiceManagement.listRoles(sessionFactory, 1);
 								System.out.print("\nChoose the role id of the role to edit: ");
 								Integer roleId = InputUtil.inputOptionCheck(rows);
 
@@ -175,7 +178,7 @@ public class Application {
 								System.out.println("[3]    Both");
 								System.out.print("Choose Option above: ");
 								Integer option = InputUtil.inputOptionCheck(3);
-								ServiceManagement.updateRoles(roleId, option);
+								ServiceManagement.updateRoles(sessionFactory, roleId, option);
 
 								break;
 							case "4":
@@ -185,7 +188,7 @@ public class Application {
 								System.out.println("[3]    by RoleName");
 								System.out.print("Choose order rule from above: ");
 								Integer orderRule = InputUtil.inputOptionCheck(3);
-								Integer out = ServiceManagement.listRoles(orderRule);
+								Integer out = ServiceManagement.listRoles(sessionFactory, orderRule);
 								System.out.println(out + " rows printed");
 								break;
 							case "5":
@@ -200,6 +203,7 @@ public class Application {
 					break;
 				case "8":
 					exit = true;
+					HibernateUtil.shutdown(sessionFactory);
 					break;
 				default:
 					System.out.println(function + " is not a valid function. Choose another function");

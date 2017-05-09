@@ -1,6 +1,5 @@
 package com.exercise6.core.dao;
 
-import com.exercise6.util.HibernateUtil;
 import com.exercise6.core.model.Roles;
 import com.exercise6.core.model.Address;
 import com.exercise6.core.model.ContactInfo;
@@ -16,8 +15,7 @@ import java.util.logging.Logger;
 
 
 public class RoleDAO {
-	public static Integer addRole(Roles role) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer addRole(SessionFactory sessionFactory, Roles role) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Integer rows = new Integer(0);
@@ -39,14 +37,12 @@ public class RoleDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return rows;
 	}
 
-	public static Integer deleteRole(Roles role) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer deleteRole(SessionFactory sessionFactory, Roles role) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Integer rows = new Integer(0);
@@ -68,14 +64,12 @@ public class RoleDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return rows;
 	}
 
-	public static Integer updateRole(Integer roleId, String roleCode, String roleName, Integer option) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer updateRole(SessionFactory sessionFactory, Integer roleId, String roleCode, String roleName, Integer option) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Integer rows = new Integer(0);
@@ -106,14 +100,13 @@ public class RoleDAO {
 				transaction.rollback();
 			}
 		} finally {
-			HibernateUtil.shutdown(sessionFactory);
+			session.close();
 		}
 
 		return rows;
 	}
 
-	public static Integer showRoles(Integer order) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer showRoles(SessionFactory sessionFactory, Integer order) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Query query;
@@ -144,14 +137,13 @@ public class RoleDAO {
 				transaction.rollback();
 			}
 		} finally {
-			HibernateUtil.shutdown(sessionFactory);
+			session.close();
 		}
 
 		return rows;
 	}
 
-	public static Number checkOccurrence(Roles role, Integer option) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Number checkOccurrence(SessionFactory sessionFactory, Roles role, Integer option) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Number duplicate = null;
@@ -191,7 +183,7 @@ public class RoleDAO {
 			System.out.println("Error occurred");
 			he.printStackTrace();
 		} finally {
-			HibernateUtil.shutdown(sessionFactory);
+			session.close();
 		}
 
 		return duplicate;

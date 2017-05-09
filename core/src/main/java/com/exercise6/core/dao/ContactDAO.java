@@ -1,6 +1,5 @@
 package com.exercise6.core.dao;
 
-import com.exercise6.util.HibernateUtil;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.model.Roles;
 import com.exercise6.core.model.Address;
@@ -16,8 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class ContactDAO {
-	public static void addContact(ContactInfo contact, Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static void addContact(SessionFactory sessionFactory, ContactInfo contact, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -41,12 +39,10 @@ public class ContactDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
-		}				
+		}	
 	}
 
-	public static void updateContact(Integer contactId, Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static void updateContact(SessionFactory sessionFactory, Integer contactId, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -81,13 +77,11 @@ public class ContactDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 	}	
 
-	public static void deleteContact(Integer contactId, Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static void deleteContact(SessionFactory sessionFactory, Integer contactId, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -120,13 +114,11 @@ public class ContactDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}	
 
 	}
 
-	public static Integer employeeContact(Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer employeeContact(SessionFactory sessionFactory, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -166,7 +158,6 @@ public class ContactDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return contactNumber;

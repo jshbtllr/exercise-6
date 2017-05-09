@@ -14,9 +14,10 @@ import java.util.Set;
 import java.util.HashSet;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import org.hibernate.SessionFactory;
 
 public class ServiceManagement {
-	public static void createEmployee() {
+	public static void createEmployee(SessionFactory sessionFactory) {
 		String lastName;
 		String firstName;
 		String middleName;
@@ -74,46 +75,46 @@ public class ServiceManagement {
 		Address address = new Address(streetNumber, barangay, city, zipcode);
 		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
 
-		Integer rows = EmployeeDAO.addEmployee(employee);
+		Integer rows = EmployeeDAO.addEmployee(sessionFactory, employee);
 		System.out.println(rows + " Employee added");
 	}
 
-	public static void deleteEmployee() {
+	public static void deleteEmployee(SessionFactory sessionFactory) {
 		System.out.println("Delete Employee");
-		Integer rows = EmployeeDAO.showEmployees(1);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		System.out.print("Enter the Employee ID to be deleted: ");
 		Integer employeeId = InputUtil.inputOptionCheck();
 		
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}
 
-		EmployeeDAO.employeeDelete(employeeId);
+		EmployeeDAO.employeeDelete(sessionFactory, employeeId);
 	}
 
-	public static void updateEmployee() {
+	public static void updateEmployee(SessionFactory sessionFactory) {
 		System.out.println("Update Employee");
-		Integer rows = EmployeeDAO.showEmployees(1);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		System.out.print("Choose Employee ID to be updated: ");
 		Integer employeeId = InputUtil.inputOptionCheck();
 		
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}	
 
-		EmployeeDAO.employeeUpdate(employeeId);
+		EmployeeDAO.employeeUpdate(sessionFactory, employeeId);
 	}
 
-	public static Integer listEmployees(Integer ruleOrder) {
-		Integer rows = EmployeeDAO.showEmployees(ruleOrder);
+	public static Integer listEmployees(SessionFactory sessionFactory, Integer ruleOrder) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, ruleOrder);
 		
 		return rows;
 	}
 
-	public static void addEmployeeRoles() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void addEmployeeRoles(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		Integer employeeId;
 		String roleCode;
 		Integer roleExist;
@@ -121,7 +122,7 @@ public class ServiceManagement {
 		System.out.print("Add role to which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck();
 
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}
@@ -131,57 +132,57 @@ public class ServiceManagement {
 
 		Roles added = new Roles(" ", roleCode);
 		
-		roleExist = RoleDAO.checkOccurrence(added,1).intValue();
+		roleExist = RoleDAO.checkOccurrence(sessionFactory, added,1).intValue();
 
 		if(roleExist > 0) {
-			EmployeeDAO.insertEmployeeRole(added, employeeId);
+			EmployeeDAO.insertEmployeeRole(sessionFactory, added, employeeId);
 		} else {
 			System.out.println("Role does not exist. Role not added.");
 		}
 
 	} 
 
-	public static void removeEmployeeRoles() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void removeEmployeeRoles(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		Integer employeeId;
 		System.out.print("Delete the roles of which employee:");
 		employeeId = InputUtil.inputOptionCheck();
 
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}
 
-		Integer roleNumber = EmployeeDAO.showEmployeeRoles(employeeId);
+		Integer roleNumber = EmployeeDAO.showEmployeeRoles(sessionFactory, employeeId);
 
 		System.out.print("Choose the RoleCode to Delete: ");
 		String roleCode = InputUtil.getRequiredInput();
-		Integer deleted = EmployeeDAO.deleteEmployeeRoles(roleCode);
+		Integer deleted = EmployeeDAO.deleteEmployeeRoles(sessionFactory, roleCode);
 	} 
 
-	public static void listEmployeeRoles() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void listEmployeeRoles(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		Integer employeeId;
 		System.out.print("Show the roles of which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck();
 
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}		
 
-		Integer roleNumber = EmployeeDAO.showEmployeeRoles(employeeId);
+		Integer roleNumber = EmployeeDAO.showEmployeeRoles(sessionFactory, employeeId);
 
 	}
 
-	public static void addContactInfo() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void addContactInfo(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		String infoType;
 
 		System.out.print("Add a contact info to which employee: ");
 		Integer emplId = InputUtil.inputOptionCheck();
 
-		while (!(EmployeeDAO.employeeCheck(emplId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, emplId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			emplId = InputUtil.inputOptionCheck();
 		}
@@ -203,82 +204,82 @@ public class ServiceManagement {
 
 		ContactInfo addInfo = new ContactInfo(infoType, infoDetail);		
 
-		ContactDAO.addContact(addInfo, emplId);
+		ContactDAO.addContact(sessionFactory, addInfo, emplId);
 	}
 
-	public static void removeContactInfo() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void removeContactInfo(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		Integer employeeId;
 
 		System.out.print("Delete a contact info from which employee: ");
 		employeeId = InputUtil.inputOptionCheck();
 
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}		
 
-		Integer contacts = ContactDAO.employeeContact(employeeId);
+		Integer contacts = ContactDAO.employeeContact(sessionFactory, employeeId);
 		System.out.print("Choose the ContactID to be deleted: ");
 		Integer contactID = InputUtil.inputOptionCheck();
 
-		ContactDAO.deleteContact(contactID, employeeId);
+		ContactDAO.deleteContact(sessionFactory, contactID, employeeId);
 	}
 
-	public static void updateContactInfo() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void updateContactInfo(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		Integer employeeId;
 
 		System.out.print("Update contact info of which employee: ");
 		employeeId = InputUtil.inputOptionCheck();	
 
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}		
 
-		Integer contacts = ContactDAO.employeeContact(employeeId);
+		Integer contacts = ContactDAO.employeeContact(sessionFactory, employeeId);
 		System.out.print("Choose the ContactID to be updated: ");
 		Integer contactID = InputUtil.inputOptionCheck();	
 
-		ContactDAO.updateContact(contactID, employeeId);
+		ContactDAO.updateContact(sessionFactory, contactID, employeeId);
 
 	}
 
-	public static void listContactInfo() {
-		Integer rows = EmployeeDAO.showEmployees(1);
+	public static void listContactInfo(SessionFactory sessionFactory) {
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1);
 		Integer employeeId;
 		System.out.print("Show Contact Information of which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck();
 
-		while (!(EmployeeDAO.employeeCheck(employeeId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck();
 		}				
 
-		Integer roleNumber = ContactDAO.employeeContact(employeeId);
+		Integer roleNumber = ContactDAO.employeeContact(sessionFactory, employeeId);
 	}
 
-	public static void addRoles(Roles role) {
-		Integer match = RoleDAO.checkOccurrence(role, 1).intValue();
+	public static void addRoles(SessionFactory sessionFactory, Roles role) {
+		Integer match = RoleDAO.checkOccurrence(sessionFactory, role, 1).intValue();
 
 		if (match > 0) {
 			System.out.println("RoleCode already exists in the database");
 		} else {
-			Integer rows = RoleDAO.addRole(role);
+			Integer rows = RoleDAO.addRole(sessionFactory, role);
 			System.out.println(rows + " row added to ROLES table");
 		}
 	}
 
-	public static void removeRoles(Roles role) {
-		Integer match = RoleDAO.checkOccurrence(role, 2).intValue();
+	public static void removeRoles(SessionFactory sessionFactory, Roles role) {
+		Integer match = RoleDAO.checkOccurrence(sessionFactory, role, 2).intValue();
 
 		if (match == 0) {
 			System.out.println("Specified Role does not exist in table ROLES");
 		} else {
-			match = RoleDAO.checkOccurrence(role, 3).intValue();
+			match = RoleDAO.checkOccurrence(sessionFactory, role, 3).intValue();
 			if (match == 0) {
-				Integer rows = RoleDAO.deleteRole(role);
+				Integer rows = RoleDAO.deleteRole(sessionFactory, role);
 				System.out.println(rows + " row deleted from table");
 			} else {
 				System.out.println("Specified Role still belongs to an employee");
@@ -286,13 +287,13 @@ public class ServiceManagement {
 		}
 	}
 
-	public static Integer listRoles(Integer rule) {
-		Integer rows = RoleDAO.showRoles(rule);
+	public static Integer listRoles(SessionFactory sessionFactory, Integer rule) {
+		Integer rows = RoleDAO.showRoles(sessionFactory, rule);
 
 		return rows;
 	}
 
-	public static void updateRoles(Integer roleId, Integer option) {
+	public static void updateRoles(SessionFactory sessionFactory, Integer roleId, Integer option) {
 		String roleCode = new String();
 		String roleName = new String();
 		Integer duplicate = null;
@@ -303,7 +304,7 @@ public class ServiceManagement {
 			roleCode = InputUtil.getRequiredInput();
 
 			role = new Roles(" ", roleCode);
-			duplicate = RoleDAO.checkOccurrence(role, 1).intValue();
+			duplicate = RoleDAO.checkOccurrence(sessionFactory, role, 1).intValue();
 		} else if(option == 2) {
 			System.out.print("Input New RoleName: ");
 			roleName = InputUtil.getRequiredInput();
@@ -314,7 +315,7 @@ public class ServiceManagement {
 			roleName = InputUtil.getRequiredInput();
 
 			role = new Roles(roleName, roleCode);
-			duplicate = RoleDAO.checkOccurrence(role, 2).intValue();
+			duplicate = RoleDAO.checkOccurrence(sessionFactory, role, 2).intValue();
 		} else {
 			System.out.println("Invalid option chosen, exiting Update Role");
 			return;
@@ -323,7 +324,7 @@ public class ServiceManagement {
 		if(duplicate > 0) {
 			System.out.println("Chosen RoleCode already exists. Exiting Role Update");
 		} else {
-			RoleDAO.updateRole(roleId, roleCode, roleName, option);
+			RoleDAO.updateRole(sessionFactory, roleId, roleCode, roleName, option);
 		}		
 	}
 }

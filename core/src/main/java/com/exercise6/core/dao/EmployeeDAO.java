@@ -1,6 +1,5 @@
 package com.exercise6.core.dao;
 
-import com.exercise6.util.HibernateUtil;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.model.Roles;
 import com.exercise6.core.model.Address;
@@ -21,8 +20,7 @@ import java.text.ParseException;
 import java.util.Comparator;
 
 public class EmployeeDAO {
-	public static Integer addEmployee (Employee employee) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer addEmployee (SessionFactory sessionFactory, Employee employee) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Integer rows = new Integer(0);
@@ -57,14 +55,12 @@ public class EmployeeDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return rows;		
 	}
 
-	public static void employeeUpdate(Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static void employeeUpdate(SessionFactory sessionFactory, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Integer rows = new Integer(0);
@@ -162,12 +158,10 @@ public class EmployeeDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 	}
 
-	public static void employeeDelete(Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static void employeeDelete(SessionFactory sessionFactory, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Integer rows = new Integer(0);
@@ -217,13 +211,12 @@ public class EmployeeDAO {
 				transaction.rollback();
 			}
 		} finally {
-			HibernateUtil.shutdown(sessionFactory);
+			session.close();
 		}			
 
 	}
 
-	public static Integer showEmployees(Integer order) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer showEmployees(SessionFactory sessionFactory, Integer order) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		Query query;
@@ -276,14 +269,13 @@ public class EmployeeDAO {
 				transaction.rollback();
 			}
 		} finally {
-			HibernateUtil.shutdown(sessionFactory);
+			session.close();
 		}
 
 		return rows;				
 	}
 
-	public static void insertEmployeeRole(Roles role, Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static void insertEmployeeRole(SessionFactory sessionFactory, Roles role, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -322,12 +314,10 @@ public class EmployeeDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}			
 	}
 
-	public static Integer showEmployeeRoles(Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer showEmployeeRoles(SessionFactory sessionFactory, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -369,14 +359,12 @@ public class EmployeeDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return roleNumber;
 	}
 
-	public static Integer deleteEmployeeRoles(String roleCode) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Integer deleteEmployeeRoles(SessionFactory sessionFactory, String roleCode) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -411,14 +399,12 @@ public class EmployeeDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return roleDelete;
 	}
 
-	public static Boolean employeeCheck(Integer employeeId) {
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	public static Boolean employeeCheck(SessionFactory sessionFactory, Integer employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		String hql = new String();
@@ -444,7 +430,6 @@ public class EmployeeDAO {
 			he.printStackTrace();
 		} finally {
 			session.close();
-			HibernateUtil.shutdown(sessionFactory);
 		}
 
 		return present;
