@@ -1,30 +1,24 @@
 package com.exercise6.core.dao;
 
 import com.exercise6.core.model.Roles;
-import com.exercise6.core.model.Address;
-import com.exercise6.core.model.ContactInfo;
-import com.exercise6.core.model.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import java.util.List;
-import java.util.logging.Logger;
 
 
 public class RoleDAO {
 	public static Integer addRole(SessionFactory sessionFactory, Roles role) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		Integer rows = new Integer(0);
-		String hql = new String();
+		Integer rows = null;
 
 		try {
 			transaction = session.beginTransaction();
-			hql = "INSERT INTO ROLES (rolecode, rolename) VALUES (:rolecode, :rolename)";
-			Query query = session.createSQLQuery(hql);
+			String sql = "INSERT INTO ROLES (ROLECODE, ROLENAME) VALUES (:rolecode, :rolename)";
+			Query query = session.createSQLQuery(sql);
 			query.setParameter("rolename", role.getRoleName());
 			query.setParameter("rolecode", role.getRoleCode());
 			rows = query.executeUpdate();
@@ -33,34 +27,30 @@ public class RoleDAO {
 			if (transaction != null)  {
 				transaction.rollback();
 			}
-			System.out.println("Error occurred");
+			System.out.println("Error encountered adding role");
 			he.printStackTrace();
 		} finally {
 			session.close();
 		}
-
 		return rows;
 	}
 
-	public static Integer deleteRole(SessionFactory sessionFactory, Roles role) {
+	public static Integer deleteRole(SessionFactory sessionFactory, Long roleId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		Integer rows = new Integer(0);
-		String hql = new String();
+		Integer rows = null;
 
 		try {
 			transaction = session.beginTransaction();
-			hql = "DELETE FROM ROLES WHERE RoleCode = :rolecode AND RoleName = :rolename";
-			Query query = session.createSQLQuery(hql);			
-			query.setParameter("rolename", role.getRoleName());
-			query.setParameter("rolecode", role.getRoleCode());
+			Query query = session.createQuery("DELETE FROM Roles WHERE id = :roleid");			
+			query.setParameter("roleid", roleId);
 			rows = query.executeUpdate();
 			transaction.commit();
 		} catch(HibernateException he) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.out.println("Error occurred");
+			System.out.println("Error encountered deleting role");
 			he.printStackTrace();
 		} finally {
 			session.close();
@@ -69,30 +59,28 @@ public class RoleDAO {
 		return rows;
 	}
 
-	public static Integer updateRole(SessionFactory sessionFactory, Integer roleId, String roleCode, String roleName, Integer option) {
+	public static Integer updateRole(SessionFactory sessionFactory, Long roleId, Roles role, Integer option) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		Integer rows = new Integer(0);
 		Query query;
+		Integer rows = null;
 
 		try {
 			transaction = session.beginTransaction();
 
 			if (option == 1) {	
-				query = session.createSQLQuery("UPDATE ROLES SET roleCode = :rolecode WHERE roleId = :roleid");
-				query.setParameter("rolecode", roleCode);
-				query.setParameter("roleid", roleId);
+				query = session.createQuery("UPDATE Roles SET roleCode = :rolecode WHERE id = :roleid");
+				query.setParameter("rolecode", role.getRoleCode());
 			} else if(option == 2) {
-				query = session.createSQLQuery("UPDATE ROLES SET roleName = :rolename WHERE roleId = :roleid");
-				query.setParameter("rolename", roleName);
-				query.setParameter("roleid", roleId);				
+				query = session.createQuery("UPDATE Roles SET roleName = :rolename WHERE id = :roleid");
+				query.setParameter("rolename", role.getRoleName());				
 			} else {
-				query = session.createSQLQuery("UPDATE ROLES SET roleCode = :rolecode, roleName = :rolename WHERE roleId = :roleid");
-				query.setParameter("rolecode", roleCode);
-				query.setParameter("rolename", roleName);
-				query.setParameter("roleid", roleId);				
+				query = session.createQuery("UPDATE Roles SET roleCode = :rolecode, roleName = :rolename WHERE id = :roleid");
+				query.setParameter("rolecode", role.getRoleCode());
+				query.setParameter("rolename", role.getRoleName());				
 			}
 
+			query.setParameter("roleid", roleId);
 			rows = query.executeUpdate();
 			transaction.commit();
 		} catch (HibernateException he) {
@@ -106,30 +94,42 @@ public class RoleDAO {
 		return rows;
 	}
 
-	public static Integer showRoles(SessionFactory sessionFactory, Integer order) {
+	public static Integer showRoles(SessionFactory sessionFactory, Integer sortRule, Integer orderRule) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		Query query;
+		Query query = null;
 		Integer rows = new Integer(0);
 
 		try {
 			transaction = session.beginTransaction();
 
-			if(order == 1) {
-				query = session.createSQLQuery("SELECT * FROM ROLES ORDER BY RoleID");	
-			} else if(order == 2) {
-				query = session.createSQLQuery("SELECT * FROM ROLES ORDER BY RoleCode");
-			} else if(order == 3) {
-				query = session.createSQLQuery("SELECT * FROM ROLES ORDER BY RoleName");
-			} else {
-				System.out.println("Invalid order rule, order will be set to defaul order by RoleID");
-				query = session.createSQLQuery("FROM ROLES ORDER BY RoleID");	
+			if(sortRule == 1) {
+				query = session.createQuery("FROM Roles ORDER BY id");
+				
+				if(orderRule == 2) {
+					query = session.createQuery("FROM Roles ORDER BY id DESC");
+				}
+			} else if(sortRule == 2) {
+				query = session.createQuery("FROM Roles ORDER BY roleCode");
+
+				if(orderRule == 2) {
+					query = session.createQuery("FROM Roles ORDER BY roleCode DESC");
+				} 
+			} else if(sortRule == 3) {
+				query = session.createQuery("FROM Roles ORDER BY roleName");
+
+				if(orderRule == 2) {
+					query = session.createQuery("FROM Roles ORDER BY roleName desc");
+				}
 			}
 
-			List <Object []>  list = query.list();
+			List <Roles> list = query.list();
 			rows = list.size();
-			for (Object [] roles : list ) {
-				System.out.println("RoleID: " + roles[0] + "    RoleCode: " + roles[1] + "    RoleName: " + roles[2]);
+			for (Roles role : list ) {
+				System.out.println("RoleID:    " + role.getId());
+				System.out.println("RoleCode:  " + role.getRoleCode());
+				System.out.println("RoleName:  " + role.getRoleName());
+				System.out.println("--------------------------------");
 			}
 
 		} catch(HibernateException he) {
@@ -143,38 +143,27 @@ public class RoleDAO {
 		return rows;
 	}
 
-	public static Number checkOccurrence(SessionFactory sessionFactory, Roles role, Integer option) {
+	public static Boolean checkOccurrence(SessionFactory sessionFactory, Roles role, Integer option) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		Number duplicate = null;
-		String hql = new String();
-		Query query;
+		Boolean existing = false;
+		Query query = null;
 
 		try {
 			transaction = session.beginTransaction();
 			if (option == 1) {
-				hql = "SELECT COUNT(A.RoleCode) FROM ROLES A WHERE A.RoleCode = :rolecode";
-				query = session.createSQLQuery(hql);
+				query = session.createQuery("SELECT id FROM Roles WHERE roleCode = :rolecode");
 				query.setParameter("rolecode", role.getRoleCode());
-				duplicate = (Number) query.list().get(0);
 			} else if (option == 2) {
-				hql = "SELECT COUNT(A.RoleCode) FROM ROLES A WHERE A.RoleCode = :rolecode AND A.RoleName = :rolename";
-				query = session.createSQLQuery(hql);
+				query = session.createQuery("SELECT id FROM Roles WHERE roleCode = :rolecode AND roleName = :rolename");
 				query.setParameter("rolecode", role.getRoleCode());
 				query.setParameter("rolename", role.getRoleName());
-				duplicate = (Number) query.list().get(0);
 			} else if (option == 3) {
-				hql = "SELECT A.RoleID FROM ROLES A WHERE A.RoleName = :rolename AND A.RoleCode = :rolecode";
-				query = session.createSQLQuery(hql);
-				query.setParameter("rolecode", role.getRoleCode());
-				query.setParameter("rolename", role.getRoleName());
-				Integer roleID = (Integer) query.list().get(0);
-
-				hql = "SELECT COUNT(B.EmployeeID) from EMPROLE B WHERE B.RoleID = :paramId";
-				query = session.createSQLQuery(hql);
-				query.setParameter("paramId", roleID);
-				duplicate = (Number) query.list().get(0);
+				query = session.createSQLQuery("SELECT B.EMPLOYEEID from EMPLOYEEROLE B WHERE B.ROLEID = :paramId");
+				query.setParameter("paramId", role.getId());
 			}
+
+			existing = !(query.list().isEmpty());
 
 		} catch(HibernateException he) {
 			if (transaction != null) {
@@ -186,7 +175,31 @@ public class RoleDAO {
 			session.close();
 		}
 
-		return duplicate;
+		return existing;
 	}
-	
+
+	public static Boolean checkId(SessionFactory sessionFactory, Long roleId) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		String hql = null;
+		Query query = null;
+		Boolean existing = false;
+
+		try {
+			transaction = session.beginTransaction();
+			query = session.createQuery("SELECT id FROM Roles WHERE id = :roleid");
+			query.setParameter("roleid", roleId);
+			existing = !(query.list().isEmpty());
+		} catch(HibernateException he) {
+			if(transaction != null) {
+				transaction.rollback();
+			}
+			System.out.println("Error checking existence of role");
+			he.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return existing;
+	}
 }

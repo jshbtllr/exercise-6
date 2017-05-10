@@ -75,13 +75,12 @@ public class EmployeeService {
 		Address address = new Address(streetNumber, barangay, city, zipcode);
 		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
 
-		Integer rows = EmployeeDAO.addEmployee(sessionFactory, employee);
-		System.out.println(rows + " Employee added");
+		EmployeeDAO.addEmployee(sessionFactory, employee);
 	}	
 
 	public static void deleteEmployee(SessionFactory sessionFactory) {
 		System.out.println("Delete Employee");
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 1);
 		System.out.print("Enter the Employee ID to be deleted: ");
 		Long employeeId = InputUtil.inputOptionCheck().longValue();
 		
@@ -90,7 +89,7 @@ public class EmployeeService {
 			employeeId = InputUtil.inputOptionCheck().longValue();
 		}
 
-		EmployeeDAO.employeeDelete(sessionFactory, employeeId);
+		EmployeeDAO.deleteEmployee(sessionFactory, employeeId);
 	}
 
 	public static void updateEmployee(SessionFactory sessionFactory) {
@@ -120,6 +119,8 @@ public class EmployeeService {
 			employeeId = InputUtil.inputOptionCheck().longValue();
 		}	
 
+		Employee employee = EmployeeDAO.getEmployee(sessionFactory, employeeId);
+
 		System.out.println("Update Employee: ");
 		System.out.println("[1]    Full Name");
 		System.out.println("[2]    Address");
@@ -131,15 +132,15 @@ public class EmployeeService {
 
 		if(option == 1) {
 			System.out.print("Input New First Name: ");
-			firstName = InputUtil.getRequiredInput();
+			employee.setFirstName(InputUtil.getRequiredInput());
 			System.out.print("Input New Last Name: ");
-			lastName = InputUtil.getRequiredInput();
+			employee.setLastName(InputUtil.getRequiredInput());
 			System.out.print("Input New Middle Name: ");
-			middleName = InputUtil.getRequiredInput();
+			employee.setMiddleName(InputUtil.getRequiredInput());
 			System.out.print("Input New Suffix Name (optional): ");
-			suffix = InputUtil.getOptionalInput();
+			employee.setSuffix(InputUtil.getOptionalInput());
 			System.out.print("Input New Title Name (optional): ");
-			title = InputUtil.getOptionalInput();
+			employee.setTitle(InputUtil.getOptionalInput());
 		} else if(option == 2) {
 			System.out.print("Input New Street Number: ");
 			streetNumber = InputUtil.getRequiredInput();
@@ -149,33 +150,31 @@ public class EmployeeService {
 			city = InputUtil.getRequiredInput();
 			System.out.print("Input New Zipcode: ");
 			zipcode = InputUtil.getRequiredInput();	
+			employee.setAddress(new Address(streetNumber, barangay, city, zipcode));
 		} else if (option == 3) {
 			System.out.print("Input New Birthdate (dd/mm/yyyy): ");
-			birthdate = InputUtil.getDate();
+			employee.setBirthday(InputUtil.getDate());
 		} else if (option == 4) {
 			System.out.print("Input new GWA: ");
-			gradeWeightAverage = InputUtil.getGrade();
+			employee.setGradeWeightAverage(InputUtil.getGrade());
 		} else {
 			System.out.print("Input New Employee Status Y if person is employed, N if not: ");
 			employed = InputUtil.getStatus();
+			employee.setEmployed(employed);
 			hireDate = null;
 			if (employed == true) {
 				System.out.print("Enter Employee Hire Date in format dd/mm/yyyy: ");
-				hireDate = InputUtil.getDate();
+				employee.setHireDate(InputUtil.getDate());
 			} else {
 				try {
 					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-					hireDate = format.parse("12/31/9999");
+					employee.setHireDate(format.parse("12/31/9999"));
 				} catch(ParseException pe) {
 					pe.printStackTrace();
 				}
 			}	
 		}
-
-		Address address = new Address(streetNumber, barangay, city, zipcode);
-		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
-
-		EmployeeDAO.employeeUpdate(sessionFactory, employeeId, employee, option);
+		EmployeeDAO.updateEmployee(sessionFactory, employee);
 	}
 
 	public static Integer listEmployees(SessionFactory sessionFactory, Integer sortFunction, Integer orderFunction) {

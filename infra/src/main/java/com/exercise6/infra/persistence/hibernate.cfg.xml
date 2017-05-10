@@ -26,7 +26,7 @@
 		</property>
 
 		<property name="hibernate.show_sql">
-			false
+			true
 		</property>
 		
 		<mapping resource="com/exercise6/infra/persistence/Employee.hbm.xml"/>

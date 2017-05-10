@@ -21,13 +21,13 @@ public class EmployeeRoleService {
 		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
 		Long employeeId;
 		String roleCode;
-		Integer roleExist;
+		Boolean roleExist;
 
 		System.out.print("Add role to which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		System.out.println("");
-		Integer listRoles = RoleDAO.showRoles(sessionFactory, 1);
+		Integer listRoles = RoleDAO.showRoles(sessionFactory, 1, 1);
 
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
@@ -40,9 +40,9 @@ public class EmployeeRoleService {
 
 		Roles added = new Roles(" ", roleCode);
 		
-		roleExist = RoleDAO.checkOccurrence(sessionFactory, added,1).intValue();
+		roleExist = RoleDAO.checkOccurrence(sessionFactory, added,1);
 
-		if(roleExist > 0) {
+		if(roleExist) {
 			EmployeeDAO.insertEmployeeRole(sessionFactory, added, employeeId);
 		} else {
 			System.out.println("Role does not exist. Role not added.");

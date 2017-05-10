@@ -164,39 +164,26 @@ public class Application {
 								RoleService.addRoles(sessionFactory, addedRole);
 								break;
 							case "2":
-								System.out.println("Deleting Role with the below information:");
-								System.out.print("Provide RoleCode: ");
-								roleCode = InputUtil.getRequiredInput();
-								System.out.print("Provide RoleName: ");
-								roleName = InputUtil.getRequiredInput();
-								Roles deletedRole = new Roles(roleName, roleCode);
-
-								RoleService.removeRoles(sessionFactory, deletedRole);
+								RoleService.removeRoles(sessionFactory);
 								break;
 							case "3":
-								System.out.println("Update Roles");
-								rows = RoleService.listRoles(sessionFactory, 1);
-								System.out.print("\nChoose the role id of the role to edit: ");
-								Integer roleId = InputUtil.inputOptionCheck(rows);
-
-								System.out.println("\nEdit: ");
-								System.out.println("[1]    RoleCode");
-								System.out.println("[2]    RoleName");
-								System.out.println("[3]    Both");
-								System.out.print("Choose Option above: ");
-								Integer option = InputUtil.inputOptionCheck(3);
-								RoleService.updateRoles(sessionFactory, roleId, option);
-
+								RoleService.updateRoles(sessionFactory);
 								break;
 							case "4":
-								System.out.println("List all available Roles");
+								System.out.println("Sort Roles:");
 								System.out.println("[1]    by RoleID");
 								System.out.println("[2]    by RoleCode");
 								System.out.println("[3]    by RoleName");
-								System.out.print("Choose order rule from above: ");
-								Integer orderRule = InputUtil.inputOptionCheck(3);
-								Integer out = RoleService.listRoles(sessionFactory, orderRule);
-								System.out.println(out + " rows printed");
+								System.out.print("Choose sort rule: ");
+								Integer sortRule = InputUtil.inputOptionCheck(3);
+								
+								System.out.println("[1]    Ascending");
+								System.out.println("[2]    Descending");
+								System.out.print("Choose order rule: ");
+								Integer orderRule = InputUtil.inputOptionCheck(2);
+
+								Integer out = RoleService.listRoles(sessionFactory, sortRule, orderRule);
+								System.out.println(out + " roles fetched");
 								break;
 							case "5":
 								subFunctionFlag = true;
