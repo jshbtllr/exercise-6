@@ -7,6 +7,7 @@ import com.exercise6.util.InputUtil;
 import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
 import com.exercise6.core.dao.ContactDAO;
+import com.exercise6.core.service.EmployeeRoleService;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Date;
@@ -33,6 +34,10 @@ public class EmployeeService {
 		Boolean employed;
 		Set <ContactInfo> contacts = new HashSet <ContactInfo>();
 		Set <Roles> role = new HashSet <Roles>();
+		Integer addRole = null;
+		Roles input = null;
+		Long roleId = null;
+		Integer option = null;
 
 		System.out.println("Creating a new Employee in database");
 		System.out.print("Employee's Full Name Details:\nLast Name: ");
@@ -72,6 +77,36 @@ public class EmployeeService {
 			}
 		}
 
+		do{
+			System.out.println("[1]    Add Roles");
+			System.out.println("[2]    Exit");
+			System.out.print("Choose an option: ");
+			addRole = InputUtil.inputOptionCheck(3);
+			if(addRole == 1) {
+				RoleDAO.showRoles(sessionFactory, 1, 1);
+				System.out.print("Enter the RoleID to be added: ");
+				roleId = InputUtil.inputOptionCheck().longValue();
+				if(RoleDAO.checkId(sessionFactory, roleId)) {
+					input = RoleDAO.getRole(sessionFactory, roleId);
+					role = EmployeeRoleService.addRoles(sessionFactory, role, input);
+				}
+			}
+		} while(addRole == 1);
+
+		do{
+			System.out.println("[1]    Add email");
+			System.out.println("[2]    Add telephone");
+			System.out.println("[3]    Add cellphone");
+			System.out.println("[4]    Exit");
+			System.out.print("Input option: ");
+			option = InputUtil.inputOptionCheck(4);		
+			
+			if(option!= 4){
+				System.out.print("Input Information Details: ");
+				String infoDetail = InputUtil.getRequiredInput();	
+			}
+		} while(option!= 4);
+		
 		Address address = new Address(streetNumber, barangay, city, zipcode);
 		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
 

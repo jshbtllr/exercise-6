@@ -114,7 +114,10 @@ public class Application {
 
 						switch (contactInfoFunction) {
 							case "1":
-								ContactInfoService.addContactInfo(sessionFactory);
+								rows = EmployeeService.listEmployees(sessionFactory, 4, 0);
+								System.out.print("Add a contact info to which employee: ");
+								Long employeeId = InputUtil.inputOptionCheck().longValue();
+								ContactInfoService.addContactInfo(sessionFactory, employeeId);
 								break;
 							case "2":
 								ContactInfoService.removeContactInfo(sessionFactory);
@@ -183,7 +186,6 @@ public class Application {
 								Integer orderRule = InputUtil.inputOptionCheck(2);
 
 								Integer out = RoleService.listRoles(sessionFactory, sortRule, orderRule);
-								System.out.println(out + " roles fetched");
 								break;
 							case "5":
 								subFunctionFlag = true;

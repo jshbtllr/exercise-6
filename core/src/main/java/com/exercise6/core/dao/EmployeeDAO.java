@@ -39,28 +39,6 @@ public class EmployeeDAO {
 		}	
 	}
 
-	public static Employee getEmployee(SessionFactory sessionFactory, Long employeeId) {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		Employee employee = null;
-		Criteria criteria = null;
-		try {
-			transaction = session.beginTransaction();
-			criteria = session.createCriteria(Employee.class);
-			criteria.add(Restrictions.eq("id", employeeId));
-			employee = (Employee) criteria.list().get(0);
-		} catch(HibernateException he) {
-			if(transaction != null) {
-				transaction.rollback();
-			}
-			System.out.println("Error getting employee");
-			he.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return employee;
-	}
-
 	public static void updateEmployee(SessionFactory sessionFactory, Employee employee) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
@@ -182,37 +160,84 @@ public class EmployeeDAO {
 		return rows;				
 	}	
 
-	public static void insertEmployeeRole(SessionFactory sessionFactory, Roles role, Long employeeId) {
+	public static Employee getEmployee(SessionFactory sessionFactory, Long employeeId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		String hql = new String();
+		Employee employee = null;
+		Criteria criteria = null;
+		Address address = null;
+		Query query = null;
+		try {
+			transaction = session.beginTransaction();
+			query = session.createSQLQuery("SELECT STREET, BARANGAY, CITY, ZIPCODE FROM EMPLOYEE WHERE EMPLOYEEID = :id");
+			query.setParameter("id", employeeId);
+			List <Object []> list = query.list();
+			for (Object [] object : list) {
+				address = new Address((String) object[0], (String) object[1], (String) object[2], (String) object[3]);
+			}
+			criteria = session.createCriteria(Employee.class);
+			criteria.add(Restrictions.eq("id", employeeId));
+			employee = (Employee) criteria.list().get(0);
+			employee.setAddress(address);
+		} catch(HibernateException he) {
+			if(transaction != null) {
+				transaction.rollback();
+			}
+			System.out.println("Error getting employee");
+			he.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return employee;
+	}	
+
+	public static Boolean employeeRoleExist(SessionFactory sessionFactory, Long roleId, Long employeeId) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
 		Query query = null;
 
 		try {
 			transaction = session.beginTransaction();
-			hql = "SELECT RoleID FROM ROLES WHERE RoleCode = :rolecode";
-			query = session.createSQLQuery(hql);
-			query.setParameter("rolecode", role.getRoleCode());
-			Number roleId = (Number) query.list().get(0);
+			query = session.createSQLQuery("SELECT ROLEID FROM EMPLOYEEROLE A WHERE A.EMPLOYEEID = :employeeid AND A.ROLEID = :roleid");
+			query.setParameter("roleid", roleId);
+			query.setParameter("employeeid", employeeId);
+		} catch(HibernateException he) {
+			if (transaction != null)  {
+				transaction.rollback();
+			}
+			System.out.println("Error occurred");
+			he.printStackTrace();
+		} finally {
+			session.close();
+		}	
 
-			hql = "SELECT RoleID FROM EMPLOYEEROLE WHERE EmployeeID = :employeeid and RoleID = :roleid";
-			query = session.createSQLQuery(hql);
-			query.setParameter("roleid", roleId.intValue());
+		return !query.list().isEmpty();
+	}	
+
+	public static void insertEmployeeRole(SessionFactory sessionFactory, Long roleId, Long employeeId) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		Query query = null;
+		String hql = null;
+
+		try {
+			transaction = session.beginTransaction();
+			query = session.createSQLQuery("SELECT ROLEID FROM EMPLOYEEROLE A WHERE A.EMPLOYEEID = :employeeid AND A.ROLEID = :roleid");
+			query.setParameter("roleid", roleId);
 			query.setParameter("employeeid", employeeId);
 
 			if (query.list().isEmpty()) {
 				hql = "INSERT INTO EMPLOYEEROLE (EmployeeID, RoleID) VALUES (:employeeid, :roleid)";
 				query = session.createSQLQuery(hql);
 				query.setParameter("employeeid", employeeId);
-				query.setParameter("roleid", roleId.intValue());
+				query.setParameter("roleid", roleId);
 				Integer rows = query.executeUpdate();	
 				transaction.commit();
 				System.out.println(rows + " role added to employee")			;
 			} else {
 				System.out.println("Role Already assigned to employee"); 
 			}
-
-
+			
 		} catch(HibernateException he) {
 			if (transaction != null)  {
 				transaction.rollback();
@@ -233,7 +258,7 @@ public class EmployeeDAO {
 
 		try {
 			transaction = session.beginTransaction();
-			hql = "SELECT Last_Name, First_Name FROM EMPLOYEE WHERE employeeid = :employeeid";
+			hql = "SELECT LASTNAME, FIRSTNAME FROM EMPLOYEE WHERE employeeid = :employeeid";
 			query = session.createSQLQuery(hql);
 			query.setParameter("employeeid", employeeId);
 

@@ -127,7 +127,7 @@ public class ContactDAO {
 
 		try {
 			transaction = session.beginTransaction();		
-			hql = "SELECT Last_Name, First_Name FROM EMPLOYEE WHERE id = :employeeid";
+			hql = "SELECT LASTNAME, FIRSTNAME FROM EMPLOYEE WHERE id = :employeeid";
 			query = session.createSQLQuery(hql);
 			query.setParameter("employeeid", employeeId);
 

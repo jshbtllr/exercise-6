@@ -4,6 +4,8 @@ import com.exercise6.core.model.Roles;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import java.util.List;
@@ -178,10 +180,33 @@ public class RoleDAO {
 		return existing;
 	}
 
+	public static Roles getRole(SessionFactory sessionFactory, Long roleId) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		Criteria criteria = null;
+		Roles output = null;
+
+		try {
+			transaction = session.beginTransaction();
+			criteria = session.createCriteria(Roles.class);
+			criteria.add(Restrictions.eq("id", roleId));
+			output = (Roles) criteria.list().get(0);
+		} catch(HibernateException he) {
+			if(transaction != null) {
+				transaction.rollback();
+			}
+			System.out.println("Error checking existence of role");
+			he.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return output;
+	}
+
 	public static Boolean checkId(SessionFactory sessionFactory, Long roleId) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
-		String hql = null;
 		Query query = null;
 		Boolean existing = false;
 

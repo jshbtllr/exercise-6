@@ -17,40 +17,51 @@ import java.text.ParseException;
 import org.hibernate.SessionFactory;
 
 public class ContactInfoService {
-	public static void addContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+	public static void addContactInfo(SessionFactory sessionFactory, Long employeeId) {
 		String infoType;
 
-		System.out.print("Add a contact info to which employee: ");
-		Long emplId = InputUtil.inputOptionCheck().longValue();
-
-		while (!(EmployeeDAO.employeeCheck(sessionFactory, emplId))) {
+		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			emplId = InputUtil.inputOptionCheck().longValue();
-		}
+			employeeId = InputUtil.inputOptionCheck().longValue();
+		}		
 
 		System.out.println("Add Contact Information: ");
 		System.out.println("[1]    Add email");
-		System.out.println("[2]    Add phone");
+		System.out.println("[2]    Add telephone");
+		System.out.println("[3]    Add cellphone");
 		System.out.print("Input option: ");
-		Integer option = InputUtil.inputOptionCheck(2);		
+		Integer option = InputUtil.inputOptionCheck(3);		
 
 		System.out.print("Input Information Details: ");
 		String infoDetail = InputUtil.getRequiredInput();
 
 		if(option == 1) {
 			infoType = "email";
+			while((infoDetail.indexOf('@')) < 0) {
+				System.out.print("Input is not a valid email. Enter a valid one: ");
+				infoDetail = InputUtil.getRequiredInput();				
+			}
+		} else if(option == 2) {
+			infoType = "telephone";
+			while(!infoDetail.matches("^[1-9]{1}\\d{6}")) {
+				System.out.print("Input is not a valid telephone. Enter a valid one: ");
+				infoDetail = InputUtil.getRequiredInput();
+			}
 		} else {
-			infoType = "phone";
+			infoType = "cellphone";
+			while(!infoDetail.matches("^09\\d{9}")) {
+				System.out.print("Input is not a valid cellphone. Enter a valid one: ");
+				infoDetail = InputUtil.getRequiredInput();
+			}			
 		}
 
 		ContactInfo addInfo = new ContactInfo(infoType, infoDetail);		
 
-		ContactDAO.addContact(sessionFactory, addInfo, emplId);
+		ContactDAO.addContact(sessionFactory, addInfo, employeeId);
 	}
 
 	public static void removeContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
 		Long employeeId;
 
 		System.out.print("Delete a contact info from which employee: ");
