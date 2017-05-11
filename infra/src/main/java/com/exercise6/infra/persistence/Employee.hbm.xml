@@ -27,12 +27,12 @@
 		<property name="gradeWeightAverage" column="gwa" type="float"/>
 		<property name="hireDate" column="hiredate" type="date"/>
 		<property name="employed" column="employed" type="boolean"/>
-		<set name="contactInfo" cascade="all" lazy="false">
+		<set name="contactInfo" cascade="all" lazy="false" inverse="true">
 			<key column="employeeid"/>
 			<one-to-many class="com.exercise6.core.model.ContactInfo"/>
 		</set>
 		<set name="role" cascade="all" table="employeerole" lazy="false">
-			<key column="employeeid"/>
+			<key column="employeeid" not-null="true"/>
 			<many-to-many column="roleid" class="com.exercise6.core.model.Roles"/>
 		</set>
 	</class>

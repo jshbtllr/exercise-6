@@ -27,7 +27,8 @@ public class Application {
 			System.out.println(" [5]    Manage Employee Roles");
 			System.out.println(" [6]    Manage Employee Contacts");
 			System.out.println(" [7]    Role Management");
-			System.out.println(" [8]    Exit Tool");
+			System.out.println(" [8]    GWA Statistics");
+			System.out.println(" [9]    Exit Tool");
 			System.out.print("\nChoose corresponding number to choose a function: ");
 
 			function = InputUtil.getRequiredInput();
@@ -66,7 +67,7 @@ public class Application {
 					System.out.println("Manage Employee's Roles");
 
 					while (!subFunctionFlag) {
-						System.out.println("[1]    Add Roles to Employee");
+						System.out.println("\n[1]    Add Roles to Employee");
 						System.out.println("[2]    Remove Roles from Employee");
 						System.out.println("[3]    List All Roles from Employee");						
 						System.out.println("[4]    Exit");
@@ -99,7 +100,7 @@ public class Application {
 					System.out.println("Manage Employee's Contact Information");
 
 					while(!subFunctionFlag) {
-						System.out.println("[1]    Add Contact Information");
+						System.out.println("\n[1]    Add Contact Information");
 						System.out.println("[2]    Remove Contact Information");
 						System.out.println("[3]    Update Contact Information");
 						System.out.println("[4]    List Contact Information");
@@ -110,16 +111,16 @@ public class Application {
 
 						switch (contactInfoFunction) {
 							case "1":
-								ContactInfoService.addRemoveContactInfo(sessionFactory, 1);
+								ContactInfoService.addContactInfo(sessionFactory);
 								break;
 							case "2":
-								//ContactInfoService.removeContactInfo(sessionFactory);
+								ContactInfoService.removeContactInfo(sessionFactory);
 								break;
 							case "3":
-								//ContactInfoService.updateContactInfo(sessionFactory);
+								ContactInfoService.updateContactInfo(sessionFactory);
 								break;
 							case "4":
-								//ContactInfoService.listContactInfo(sessionFactory);
+								ContactInfoService.listContactInfo(sessionFactory);
 								break;
 							case "5":
 								subFunctionFlag = true;
@@ -191,6 +192,9 @@ public class Application {
 					}
 					break;
 				case "8":
+
+					break;
+				case "9":
 					exit = true;
 					HibernateUtil.shutdown(sessionFactory);
 					break;

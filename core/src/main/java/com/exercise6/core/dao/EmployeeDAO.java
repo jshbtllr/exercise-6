@@ -97,8 +97,28 @@ public class EmployeeDAO {
 		} finally {
 			session.close();
 		}			
-
 	}
+
+	public static void deleteContactInfo(SessionFactory sessionFactory, Long employeeId, Long contactId) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		Query query = null;
+
+		try {
+			transaction = session.beginTransaction();
+			query = session.createSQLQuery("DELETE FROM CONTACTINFO WHERE EMPLOYEEID = :employeeid AND CONTACTID = :id");
+			query.setParameter("employeeid", employeeId);
+			query.setParameter("id", contactId);
+			query.executeUpdate();
+			transaction.commit();			
+		} catch(HibernateException he) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			session.close();
+		}			
+	}	
 
 	public static Employee getEmployee(SessionFactory sessionFactory, Long employeeId) {
 		Session session = sessionFactory.openSession();
@@ -167,29 +187,6 @@ public class EmployeeDAO {
 		
 		return present;
 	}
-
-	public static Long addContactDetail(SessionFactory sessionFactory, ContactInfo contact) {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		Long id = null;
-
-		try {
-			transaction = session.beginTransaction();
-			session.save(contact);
-			id = contact.getId();
-			transaction.commit();
-		} catch(HibernateException he) {
-			if (transaction != null)  {
-				transaction.rollback();
-			}
-			System.out.println("Error encountered adding role");
-			he.printStackTrace();
-		} finally {
-			session.close();
-		}
-
-		return id;
-	}	
 }
 
 class gwaComparator implements Comparator <Employee> {

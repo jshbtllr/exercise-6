@@ -6,7 +6,6 @@ import com.exercise6.core.model.Employee;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
-import com.exercise6.core.dao.ContactDAO;
 import com.exercise6.core.service.RoleService;
 import java.util.Scanner;
 import java.util.List;

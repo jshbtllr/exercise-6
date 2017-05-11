@@ -6,7 +6,6 @@ import com.exercise6.core.model.Employee;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
-import com.exercise6.core.dao.ContactDAO;
 import com.exercise6.core.service.EmployeeRoleService;
 import com.exercise6.core.service.ContactInfoService;
 import java.util.Date;
@@ -81,7 +80,11 @@ public class EmployeeService {
 			}
 		}
 
+		Address address = new Address(streetNumber, barangay, city, zipcode, country);
+		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
+
 		do{
+			System.out.println("Employee Role Management");
 			System.out.println("[1]    Add Roles");
 			System.out.println("[2]    Exit");
 			System.out.print("Choose an option: ");
@@ -92,25 +95,19 @@ public class EmployeeService {
 		} while(option == 1);
 
 		option = 0;
-/*
+
 		do{
-			System.out.println("[1]    Add email");
-			System.out.println("[2]    Add telephone");
-			System.out.println("[3]    Add cellphone");
-			System.out.println("[4]    Exit");
+			System.out.println("Employee Contact Info Management");
+			System.out.println("[1]    Add contacts");
+			System.out.println("[2]    Exit");
 			System.out.print("Input option: ");
-			option = InputUtil.inputOptionCheck(4);		
+			option = InputUtil.inputOptionCheck(2);		
 			
-			if(option!= 4){
-				System.out.print("Input Information Details: ");
-				String infoDetail = InputUtil.getRequiredInput();
-				ContactInfo addInfo = ContactInfoService.checkInfo(infoDetail, option);
-				contacts.add(addInfo);
+			if(option!= 2){
+				contacts = ContactInfoService.addContactSet(sessionFactory, contacts, employee);
+				employee.setContactInfo(contacts);
 			}
-		} while(option!= 4);*/
-		
-		Address address = new Address(streetNumber, barangay, city, zipcode, country);
-		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
+		} while(option!= 2);
 
 		EmployeeDAO.addEmployee(sessionFactory, employee);
 	}

@@ -5,6 +5,7 @@ public class ContactInfo {
 	private Long id;
 	private String infoType;
 	private String infoDetail;
+	private Employee parentEmployee;
 
 	public ContactInfo() {}
 	public ContactInfo(String infoType, String infoDetail) {
@@ -24,6 +25,10 @@ public class ContactInfo {
 		return this.infoDetail;
 	}
 
+	public Employee getParentEmployee() {
+		return this.parentEmployee;
+	}
+
 	public void setId(Long input) {
 		this.id = input;
 	}
@@ -34,6 +39,10 @@ public class ContactInfo {
 
 	public void setInfoDetail(String input) {
 		this.infoDetail = input;
+	}
+
+	public void setParentEmployee(Employee input) {
+		this.parentEmployee = input;
 	}
 	
 }

@@ -13,5 +13,6 @@
 		</id>
 		<property name="infoType" column="contactinfotype" type="string"/>
 		<property name="infoDetail" column="contactinformation" type="string"/>
+		<many-to-one name="parentEmployee" column="employeeid" cascade="all"/>
 	</class>
 </hibernate-mapping>
