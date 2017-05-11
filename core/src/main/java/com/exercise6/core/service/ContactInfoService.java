@@ -17,51 +17,92 @@ import java.text.ParseException;
 import org.hibernate.SessionFactory;
 
 public class ContactInfoService {
-	public static void addContactInfo(SessionFactory sessionFactory, Long employeeId) {
-		String infoType;
+	public static void addRemoveContactInfo(SessionFactory sessionFactory, Integer option) {
+		String infoType = null;
+		Employee employee = null;
+		Set <ContactInfo> contacts;
+
+		EmployeeService.listEmployees(sessionFactory, 4, 0);
+		System.out.print("Add contact info to which employee: ");
+		Long employeeId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
 			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
 			employeeId = InputUtil.inputOptionCheck().longValue();
-		}		
+		}	
 
+		employee = EmployeeDAO.getEmployee(sessionFactory, employeeId);
+		contacts = employee.getContactInfo();	
+
+		contacts = addContactSet(sessionFactory, contacts);
+		employee.setContactInfo(contacts);
+		EmployeeDAO.updateEmployee(sessionFactory, employee);
+	}
+
+
+	public static Set <ContactInfo> addContactSet(SessionFactory sessionFactory, Set <ContactInfo> contacts) {	
+		Long contactId = null;
+		Boolean exist = false;
 		System.out.println("Add Contact Information: ");
 		System.out.println("[1]    Add email");
 		System.out.println("[2]    Add telephone");
 		System.out.println("[3]    Add cellphone");
 		System.out.print("Input option: ");
+		
 		Integer option = InputUtil.inputOptionCheck(3);		
-
 		System.out.print("Input Information Details: ");
 		String infoDetail = InputUtil.getRequiredInput();
 
+		ContactInfo addInfo = checkInfo(infoDetail, option);
+
+		if(contacts.isEmpty()) {
+			//contactId = EmployeeDAO.addContactDetail(sessionFactory, addInfo);
+			addInfo.setId(contactId);
+			contacts.add(addInfo);
+		} else {
+			for(ContactInfo list : contacts) {
+				if(list.getInfoDetail().equals(addInfo.getInfoDetail())) {
+					exist = true;
+					System.out.println("Contact Info already added to employee");
+				}
+			}
+			if(!exist) {
+				//contactId = EmployeeDAO.addContactDetail(sessionFactory, addInfo);
+				addInfo.setId(contactId);
+				contacts.add(addInfo);				
+			}
+		}
+		return contacts;
+	}
+
+	public static ContactInfo checkInfo(String information, Integer option) {
+		String infoType = null;
 		if(option == 1) {
 			infoType = "email";
-			while((infoDetail.indexOf('@')) < 0) {
+			while((information.indexOf('@')) < 0) {
 				System.out.print("Input is not a valid email. Enter a valid one: ");
-				infoDetail = InputUtil.getRequiredInput();				
+				information = InputUtil.getRequiredInput();				
 			}
 		} else if(option == 2) {
 			infoType = "telephone";
-			while(!infoDetail.matches("^[1-9]{1}\\d{6}")) {
+			while(!information.matches("^[1-9]{1}\\d{6}")) {
 				System.out.print("Input is not a valid telephone. Enter a valid one: ");
-				infoDetail = InputUtil.getRequiredInput();
+				information = InputUtil.getRequiredInput();
 			}
 		} else {
 			infoType = "cellphone";
-			while(!infoDetail.matches("^09\\d{9}")) {
+			while(!information.matches("^09\\d{9}")) {
 				System.out.print("Input is not a valid cellphone. Enter a valid one: ");
-				infoDetail = InputUtil.getRequiredInput();
+				information = InputUtil.getRequiredInput();
 			}			
 		}
 
-		ContactInfo addInfo = new ContactInfo(infoType, infoDetail);		
-
-		ContactDAO.addContact(sessionFactory, addInfo, employeeId);
+		ContactInfo addInfo = new ContactInfo(infoType, information);	
+		return addInfo;		
 	}
 
 	public static void removeContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
+		EmployeeService.listEmployees(sessionFactory, 4, 0);
 		Long employeeId;
 
 		System.out.print("Delete a contact info from which employee: ");
@@ -80,7 +121,7 @@ public class ContactInfoService {
 	}
 
 	public static void updateContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		EmployeeService.listEmployees(sessionFactory, 1, 1);
 		Long employeeId;
 
 		System.out.print("Update contact info of which employee: ");
@@ -100,7 +141,7 @@ public class ContactInfoService {
 	}
 
 	public static void listContactInfo(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		EmployeeService.listEmployees(sessionFactory, 1, 1);
 		Long employeeId;
 		System.out.print("Show Contact Information of which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck().longValue();

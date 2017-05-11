@@ -7,44 +7,30 @@ import com.exercise6.util.InputUtil;
 import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
 import com.exercise6.core.dao.ContactDAO;
+import com.exercise6.core.service.RoleService;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Date;
 import java.util.Set;
+import java.util.Collections;
+import java.util.Comparator;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.hibernate.SessionFactory;
 
 public class EmployeeRoleService {
-	public static Set <Roles> addRoles(SessionFactory sessionFactory, Set <Roles> roles, Roles addRole) {
-		Boolean exist = false;
+	public static void addRemoveEmployeeRoles(SessionFactory sessionFactory, Integer option) {			/*Option 1 add, Option 2 remove*/
+		Employee employee = null;
+		Long employeeId = null;
+		Set <Roles> employeeRoles;
 
-		if(roles.isEmpty()) {
-			roles.add(addRole);
+		EmployeeService.listEmployees(sessionFactory, 4, 0);
+		if(option == 1) {
+			System.out.print("Add role to which EmployeeId: ");
 		} else {
-			for(Roles list : roles) {
-				if(addRole.getId().equals(list.getId())) {
-					exist = true;
-				}
-			}
-			if(!exist) {
-				roles.add(addRole);
-			}
+			System.out.print("Remove role to which EmployeeId: ");
 		}
 
-		return roles;
-	}
-
-	public static void addEmployeeRoles(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
-		Employee employee = null;
-		Set <Roles> roles = null;
-		Roles input = null;
-		Long employeeId;
-		Long roleId;
-		Boolean roleExist;
-
-		System.out.print("Add role to which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck().longValue();
 
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
@@ -53,51 +39,98 @@ public class EmployeeRoleService {
 		}
 
 		employee = EmployeeDAO.getEmployee(sessionFactory, employeeId);
-		roles = employee.getRole();
+		employeeRoles = employee.getRole();	
 
-		for(Roles list : roles) {
-			System.out.println(list.getId() + list.getRoleName());
+		if(option == 1) {
+			employeeRoles = addRoleSet(sessionFactory, employeeRoles);	
+		} else {
+			if(employeeRoles.isEmpty()) {
+				System.out.println("No Roles to remove");
+				return;
+			}
+			employeeRoles = removeRoleSet(sessionFactory, employeeRoles);
 		}
 
-		System.out.println("");
-		Integer listRoles = RoleDAO.showRoles(sessionFactory, 1, 1);		
+		employee.setRole(employeeRoles);
+		EmployeeDAO.updateEmployee(sessionFactory, employee);
+	}
 
+	public static Set <Roles> addRoleSet(SessionFactory sessionFactory, Set <Roles> roles) {
+		Roles newRole = new Roles(" ", " ");
+		Long roleId = null;
+		Boolean exist = false;
+
+		RoleService.listRoles(sessionFactory, 1, 1);
 		System.out.print("Input the Role Id to add: ");
 		roleId = InputUtil.inputOptionCheck().longValue();
+		newRole.setId(roleId);
+
+		if(!(RoleDAO.checkDuplicateRole(sessionFactory, newRole, 4))) {
+			System.out.println("Role ID is not a valid Role ID. Role not added");
+			return roles;
+		}
+
+		newRole = RoleDAO.getRoleDetails(sessionFactory, roleId);
 		
-		if(RoleDAO.checkId(sessionFactory, roleId)) {
-			input = RoleDAO.getRole(sessionFactory, roleId);
-			roles = addRoles(sessionFactory, roles, input);
-			employee.setRole(roles);
-			EmployeeDAO.updateEmployee(sessionFactory, employee);
-			//EmployeeDAO.insertEmployeeRole(sessionFactory, roleId, employeeId);
+		if(roles.isEmpty()) {
+			roles.add(newRole);
 		} else {
-			System.out.println("Role does not exist. Role not added.");
+			for(Roles list : roles) {
+				if(newRole.getId().equals(list.getId())) {
+					exist = true;
+					System.out.println("Role is already added to employee");
+				}
+			}
+			if(!exist) {
+				roles.add(newRole);
+			}
+		}
+		return roles;
+	}
+
+	public static Set <Roles> removeRoleSet(SessionFactory sessionFactory, Set <Roles> roles) {
+		Roles deleteRole = new Roles(" ", " ");
+		Long roleId = null;
+		Boolean exist = false;
+			
+		System.out.println("Available Roles for Employee: ");
+		for (Roles list : roles) {
+			System.out.println("Role ID: " + list.getId());	
+			System.out.println("Role Code: " + list.getRoleCode());
+			System.out.println("Role Name: " + list.getRoleName());
+			System.out.println("---------------");
 		}
 
-	} 
+		System.out.print("Input the Role Id to remove: ");
+		roleId = InputUtil.inputOptionCheck().longValue();
+		deleteRole.setId(roleId);
 
-	public static void removeEmployeeRoles(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
-		Long employeeId;
-		System.out.print("Delete the roles of which employee:");
-		employeeId = InputUtil.inputOptionCheck().longValue();
+		if(!(RoleDAO.checkDuplicateRole(sessionFactory, deleteRole, 4))) {
+			System.out.println("Role ID is not a valid Role ID. Role not added");
+			return roles;
+		}
+		deleteRole = RoleDAO.getRoleDetails(sessionFactory, roleId);
 
-		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
-			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
-			employeeId = InputUtil.inputOptionCheck().longValue();
+		for(Roles list : roles) {
+			if(deleteRole.getId().equals(list.getId())) {
+				exist = true;
+				roles.remove(list);
+			}
 		}
 
-		Integer roleNumber = EmployeeDAO.showEmployeeRoles(sessionFactory, employeeId);
+		if(!exist) {
+			System.out.println("Role not assigned to employee");
+		}
 
-		System.out.print("Choose the RoleCode to Delete: ");
-		String roleCode = InputUtil.getRequiredInput();
-		Integer deleted = EmployeeDAO.deleteEmployeeRoles(sessionFactory, roleCode);
-	} 
+		return roles;
+	}	
 
 	public static void listEmployeeRoles(SessionFactory sessionFactory) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 1, 1);
+		EmployeeService.listEmployees(sessionFactory, 4, 0);
 		Long employeeId;
+		Employee employee = null;
+		Set <Roles> roles = null;
+
 		System.out.print("Show the roles of which EmployeeId: ");
 		employeeId = InputUtil.inputOptionCheck().longValue();
 
@@ -106,7 +139,20 @@ public class EmployeeRoleService {
 			employeeId = InputUtil.inputOptionCheck().longValue();
 		}		
 
-		Integer roleNumber = EmployeeDAO.showEmployeeRoles(sessionFactory, employeeId);
+		employee = EmployeeDAO.getEmployee(sessionFactory, employeeId);
+		roles = employee.getRole();
 
+		System.out.println("Employee has: ");
+
+		if(roles.isEmpty()) {
+			System.out.println("No available roles");
+		} else {
+			System.out.println("the below rolecode and rolename as roles");
+			for (Roles list : roles) {
+				System.out.println("Role Code: " + list.getRoleCode());
+				System.out.println("Role Name: " + list.getRoleName());
+				System.out.println("---------------");
+			}
+		}
 	}	
 }

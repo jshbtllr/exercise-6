@@ -8,14 +8,16 @@ import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
 import com.exercise6.core.dao.ContactDAO;
 import com.exercise6.core.service.EmployeeRoleService;
-import java.util.Scanner;
-import java.util.List;
+import com.exercise6.core.service.ContactInfoService;
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.hibernate.SessionFactory;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class EmployeeService {
 	public static void createEmployee(SessionFactory sessionFactory) {
@@ -28,13 +30,13 @@ public class EmployeeService {
 		String barangay;
 		String city;
 		String zipcode;
+		String country;
 		Date birthdate;
 		Date hireDate = null;
 		Float gradeWeightAverage;
 		Boolean employed;
 		Set <ContactInfo> contacts = new HashSet <ContactInfo>();
 		Set <Roles> role = new HashSet <Roles>();
-		Integer addRole = null;
 		Roles input = null;
 		Long roleId = null;
 		Integer option = null;
@@ -58,6 +60,8 @@ public class EmployeeService {
 		city = InputUtil.getRequiredInput();
 		System.out.print("Zipcode: ");
 		zipcode = InputUtil.getRequiredInput();
+		System.out.print("Country: ");
+		country = InputUtil.getRequiredInput();		
 		System.out.print("Employee's Birthdate (dd/mm/yyyy): ");
 		birthdate = InputUtil.getDate();
 		System.out.print("Employee's Grade Weighted Average: ");
@@ -81,18 +85,14 @@ public class EmployeeService {
 			System.out.println("[1]    Add Roles");
 			System.out.println("[2]    Exit");
 			System.out.print("Choose an option: ");
-			addRole = InputUtil.inputOptionCheck(3);
-			if(addRole == 1) {
-				RoleDAO.showRoles(sessionFactory, 1, 1);
-				System.out.print("Enter the RoleID to be added: ");
-				roleId = InputUtil.inputOptionCheck().longValue();
-				if(RoleDAO.checkId(sessionFactory, roleId)) {
-					input = RoleDAO.getRole(sessionFactory, roleId);
-					role = EmployeeRoleService.addRoles(sessionFactory, role, input);
-				}
+			option = InputUtil.inputOptionCheck(2);
+			if(option == 1) {
+				role = EmployeeRoleService.addRoleSet(sessionFactory, role);
 			}
-		} while(addRole == 1);
+		} while(option == 1);
 
+		option = 0;
+/*
 		do{
 			System.out.println("[1]    Add email");
 			System.out.println("[2]    Add telephone");
@@ -103,19 +103,57 @@ public class EmployeeService {
 			
 			if(option!= 4){
 				System.out.print("Input Information Details: ");
-				String infoDetail = InputUtil.getRequiredInput();	
+				String infoDetail = InputUtil.getRequiredInput();
+				ContactInfo addInfo = ContactInfoService.checkInfo(infoDetail, option);
+				contacts.add(addInfo);
 			}
-		} while(option!= 4);
+		} while(option!= 4);*/
 		
-		Address address = new Address(streetNumber, barangay, city, zipcode);
+		Address address = new Address(streetNumber, barangay, city, zipcode, country);
 		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
 
 		EmployeeDAO.addEmployee(sessionFactory, employee);
+	}
+
+	public static void listEmployees(SessionFactory sessionFactory, Integer sortFunction, Integer orderFunction) {
+		List <Employee> list = EmployeeDAO.showEmployees(sessionFactory, sortFunction, orderFunction);
+		if(!list.isEmpty()) {
+			if(sortFunction == 2) {
+				Collections.sort(list, new gwaComparator());
+
+				if(orderFunction == 2) {
+					Collections.sort(list, Collections.reverseOrder(new gwaComparator()));						
+				}
+			}
+
+			for ( Employee employee : list ) {
+				System.out.println("EmployeeID: " + employee.getId());
+				System.out.println("FullName:   " + ((employee.getTitle().equals("") || employee.getTitle().equals(" ")) ? "" : employee.getTitle() + " ") 
+									+ employee.getFirstName() + " " + employee.getMiddleName() + " " + employee.getLastName() + " " + employee.getSuffix());
+				
+				if(sortFunction != 4) {  	/*Sort Type 4 for employeeid and Fullname prints*/
+					System.out.println("Address:    " + employee.getAddress().getStreetNumber() + " " + employee.getAddress().getBarangay() + " " 
+										+ employee.getAddress().getCity() + " " + employee.getAddress().getCountry() + " " + employee.getAddress().getZipcode());
+					System.out.println("Birthday:   " + employee.getBirthday());
+					System.out.println("GWA:        " + employee.getGradeWeightAverage());
+					if(employee.getEmployed().equals(true)) {
+						System.out.println("Employed:   Yes");
+						System.out.println("Hire Date:  " + employee.getHireDate());
+					} else {
+						System.out.println("Employed:   No");
+						System.out.println("Hire Date:  " + "N/A");
+					}
+				}
+				System.out.println("-------------------------------------------------------------------\n");
+			}
+		} else {
+			System.out.println("No employees registered.");
+		}	
 	}	
 
 	public static void deleteEmployee(SessionFactory sessionFactory) {
 		System.out.println("Delete Employee");
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 1);
+		listEmployees(sessionFactory, 4, 1);
 		System.out.print("Enter the Employee ID to be deleted: ");
 		Long employeeId = InputUtil.inputOptionCheck().longValue();
 		
@@ -137,6 +175,7 @@ public class EmployeeService {
 		String barangay = new String();
 		String city = new String();
 		String zipcode = new String();
+		String country = new String();
 		Date birthdate = null;
 		Date hireDate = null;
 		Float gradeWeightAverage = new Float(0.0f);
@@ -145,12 +184,12 @@ public class EmployeeService {
 		Set <Roles> role = new HashSet <Roles>();
 
 		System.out.println("Update Employee");
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, 4, 0);
+		listEmployees(sessionFactory, 4, 0);
 		System.out.print("Choose Employee ID to be updated: ");
 		Long employeeId = InputUtil.inputOptionCheck().longValue();
 		
 		while (!(EmployeeDAO.employeeCheck(sessionFactory, employeeId))) {
-			System.out.print("Employee ID chosen does not exist. Enter a new employee id to delete: ");
+			System.out.print("Employee ID chosen does not exist. Enter a valid Employee ID: ");
 			employeeId = InputUtil.inputOptionCheck().longValue();
 		}	
 
@@ -183,9 +222,11 @@ public class EmployeeService {
 			barangay = InputUtil.getRequiredInput();
 			System.out.print("Input New City: ");
 			city = InputUtil.getRequiredInput();
+			System.out.print("Input New Country: ");
+			country = InputUtil.getRequiredInput();
 			System.out.print("Input New Zipcode: ");
 			zipcode = InputUtil.getRequiredInput();	
-			employee.setAddress(new Address(streetNumber, barangay, city, zipcode));
+			employee.setAddress(new Address(streetNumber, barangay, city, country, zipcode));
 		} else if (option == 3) {
 			System.out.print("Input New Birthdate (dd/mm/yyyy): ");
 			employee.setBirthday(InputUtil.getDate());
@@ -211,10 +252,10 @@ public class EmployeeService {
 		}
 		EmployeeDAO.updateEmployee(sessionFactory, employee);
 	}
+}
 
-	public static Integer listEmployees(SessionFactory sessionFactory, Integer sortFunction, Integer orderFunction) {
-		Integer rows = EmployeeDAO.showEmployees(sessionFactory, sortFunction, orderFunction);
-		
-		return rows;
+class gwaComparator implements Comparator <Employee> {
+	public int compare(Employee a, Employee b) {
+		return a.getGradeWeightAverage() < b.getGradeWeightAverage() ? -1 : a.getGradeWeightAverage() == b.getGradeWeightAverage() ? 0 : 1;
 	}
 }

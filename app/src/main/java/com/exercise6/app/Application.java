@@ -8,8 +8,6 @@ import com.exercise6.core.service.EmployeeRoleService;
 import com.exercise6.core.model.Roles;
 import com.exercise6.util.HibernateUtil;
 import org.hibernate.SessionFactory;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 public class Application {
 	public static void main (String [] args) {
@@ -61,12 +59,10 @@ public class Application {
 					System.out.print("Input Sort order: ");	
 					orderFunction = InputUtil.inputOptionCheck(2);
 
-					rows = EmployeeService.listEmployees(sessionFactory, sortFunction, orderFunction);
-					System.out.println(rows + " Employees retrieved");
-
+					EmployeeService.listEmployees(sessionFactory, sortFunction, orderFunction);
 					break;
 				case "5":
-					String employeeRoleFunction = new String();
+				String employeeRoleFunction = new String();
 					System.out.println("Manage Employee's Roles");
 
 					while (!subFunctionFlag) {
@@ -80,10 +76,10 @@ public class Application {
 
 						switch (employeeRoleFunction) {
 							case "1":
-								EmployeeRoleService.addEmployeeRoles(sessionFactory);
+								EmployeeRoleService.addRemoveEmployeeRoles(sessionFactory, 1);
 								break;
 							case "2":
-								EmployeeRoleService.removeEmployeeRoles(sessionFactory);
+								EmployeeRoleService.addRemoveEmployeeRoles(sessionFactory, 2);
 								break;
 							case "3":
 								EmployeeRoleService.listEmployeeRoles(sessionFactory);
@@ -114,19 +110,16 @@ public class Application {
 
 						switch (contactInfoFunction) {
 							case "1":
-								rows = EmployeeService.listEmployees(sessionFactory, 4, 0);
-								System.out.print("Add a contact info to which employee: ");
-								Long employeeId = InputUtil.inputOptionCheck().longValue();
-								ContactInfoService.addContactInfo(sessionFactory, employeeId);
+								ContactInfoService.addRemoveContactInfo(sessionFactory, 1);
 								break;
 							case "2":
-								ContactInfoService.removeContactInfo(sessionFactory);
+								//ContactInfoService.removeContactInfo(sessionFactory);
 								break;
 							case "3":
-								ContactInfoService.updateContactInfo(sessionFactory);
+								//ContactInfoService.updateContactInfo(sessionFactory);
 								break;
 							case "4":
-								ContactInfoService.listContactInfo(sessionFactory);
+								//ContactInfoService.listContactInfo(sessionFactory);
 								break;
 							case "5":
 								subFunctionFlag = true;
@@ -185,7 +178,7 @@ public class Application {
 								System.out.print("Choose order rule: ");
 								Integer orderRule = InputUtil.inputOptionCheck(2);
 
-								Integer out = RoleService.listRoles(sessionFactory, sortRule, orderRule);
+								RoleService.listRoles(sessionFactory, sortRule, orderRule);
 								break;
 							case "5":
 								subFunctionFlag = true;

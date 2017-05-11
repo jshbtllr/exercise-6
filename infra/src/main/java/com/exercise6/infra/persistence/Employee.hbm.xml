@@ -21,16 +21,17 @@
 			<property name="barangay" column="barangay" type="string"/>
 			<property name="city" column="city" type="string"/>
 			<property name="zipcode" column="zipcode" type="string"/>
+			<property name="country" column="country" type="string"/>
 		</component>
 		<property name="birthday" column="birthday" type="date"/>
 		<property name="gradeWeightAverage" column="gwa" type="float"/>
 		<property name="hireDate" column="hiredate" type="date"/>
 		<property name="employed" column="employed" type="boolean"/>
-		<set name="contactInfo" cascade="delete">
+		<set name="contactInfo" cascade="all" lazy="false">
 			<key column="employeeid"/>
 			<one-to-many class="com.exercise6.core.model.ContactInfo"/>
 		</set>
-		<set name="role" cascade="delete" table="employeerole">
+		<set name="role" cascade="all" table="employeerole" lazy="false">
 			<key column="employeeid"/>
 			<many-to-many column="roleid" class="com.exercise6.core.model.Roles"/>
 		</set>

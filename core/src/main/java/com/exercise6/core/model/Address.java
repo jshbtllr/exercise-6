@@ -7,13 +7,15 @@ public class Address {
 	private String barangay;
 	private String city;
 	private String zipcode;
+	private String country;
 
 	public Address() {}
-	public Address(String streetNumber, String barangay, String city, String zipcode) {
+	public Address(String streetNumber, String barangay, String city, String country, String zipcode) {
 		this.streetNumber = streetNumber;
 		this.barangay = barangay;
 		this.city = city;
 		this.zipcode = zipcode;
+		this.country = country;
 	}
 
 	private Long getId() {
@@ -36,6 +38,10 @@ public class Address {
 		return this.zipcode;
 	}
 
+	public String getCountry() {
+		return this.country;
+	}
+
 	public void setId(Long input) {
 		this.id = input;
 	}
@@ -49,10 +55,14 @@ public class Address {
 	}
 
 	public void setCity(String input) {
-		this.city = city;
+		this.city = input;
 	}
 
 	public void setZipcode(String input) {
-		this.zipcode = zipcode;
+		this.zipcode = input;
+	}
+
+	public void setCountry(String input) {
+		this.country = input;
 	}
 }
