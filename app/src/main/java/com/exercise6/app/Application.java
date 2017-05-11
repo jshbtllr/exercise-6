@@ -5,6 +5,7 @@ import com.exercise6.core.service.EmployeeService;
 import com.exercise6.core.service.RoleService;
 import com.exercise6.core.service.ContactInfoService;
 import com.exercise6.core.service.EmployeeRoleService;
+import com.exercise6.core.dao.EmployeeDAO;
 import com.exercise6.core.model.Roles;
 import com.exercise6.util.HibernateUtil;
 import org.hibernate.SessionFactory;
@@ -192,7 +193,13 @@ public class Application {
 					}
 					break;
 				case "8":
-
+					System.out.println("GWA Statistics");
+					System.out.println("[1]    Lowest GWA");
+					System.out.println("[2]    Highest GWA");
+					System.out.println("[3]    Average GWA");
+					System.out.println("Choose a function: ");
+					Integer option = InputUtil.inputOptionCheck(3);
+					EmployeeDAO.gwaStatistics(sessionFactory, option);
 					break;
 				case "9":
 					exit = true;

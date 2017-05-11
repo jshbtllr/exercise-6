@@ -10,7 +10,7 @@
 
 	<groupId>com.exercise6.util</groupId>
 	<artifactId>util</artifactId>
-	<version>1.0.1</version>
+	<version>${parent-version}</version>
 
 	<dependencies>
 		<dependency>

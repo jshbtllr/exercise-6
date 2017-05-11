@@ -14,6 +14,7 @@
 	</modules>
 
 	<properties>
+		<parent-version>1.0.1</parent-version>
 		<dependency-plugin-version>3.0.0</dependency-plugin-version>
 		<jar-plugin-version>3.0.2</jar-plugin-version>
 		<java-version>1.8</java-version>
@@ -24,30 +25,51 @@
 		<javassist-version>3.12.1.GA</javassist-version>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+			<properties>
+				<hibernate-url>jdbc:postgresql://127.0.0.1:5432/v6</hibernate-url>
+				<hibernate-username>postgres</hibernate-username>
+				<hibernate-password>ex1stgl0bal</hibernate-password>
+				<hibernate-show-sql>true</hibernate-show-sql>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<hibernate-url>jdbc:postgresql://127.0.0.1:5432/EmployeeRegistration</hibernate-url>
+				<hibernate-username>postgres</hibernate-username>
+				<hibernate-password>postgres</hibernate-password>
+				<hibernate-show-sql>false</hibernate-show-sql>
+			</properties>
+		</profile>
+	</profiles>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>com.exercise6.app</groupId>
 				<artifactId>app</artifactId>
-				<version>${project.version}</version>
+				<version>${parent-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.exercise6.infra</groupId>
 				<artifactId>infra</artifactId>
-				<version>${project.version}</version>
+				<version>${parent-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.exercise6.util</groupId>
 				<artifactId>util</artifactId>
-				<version>${project.version}</version>
+				<version>${parent-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.exercise6.core</groupId>
 				<artifactId>core</artifactId>
-				<version>${project.version}</version>
+				<version>${parent-version}</version>
 			</dependency>
 
 			<dependency>
@@ -97,6 +119,14 @@
  					<artifactId>maven-jar-plugin</artifactId>
  					<version>${jar-plugin-version}</version>
  					<configuration>
+ 						<resources>
+ 							<resource>
+ 								<filtering>true</filtering>
+ 								<includes>
+ 									<include>../infra/src/main/java/com/exercise6/infra/persistence/hibernate.cgf.xml</include>
+ 								</includes>
+ 							</resource>
+ 						</resources>
  						<archive>
  							<manifest>
 	 							<addClasspath>true</addClasspath>

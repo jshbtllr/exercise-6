@@ -187,6 +187,32 @@ public class EmployeeDAO {
 		
 		return present;
 	}
+
+	public static void gwaStatistics(SessionFactory sessionFactory, Integer option) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		Query query = null;
+
+		try {
+			transaction = session.beginTransaction();
+			if(option == 1) {
+				query = session.createQuery("SELECT min(gradeWeightAverage) FROM Employee");
+			} else if(option == 2) {
+				query = session.createQuery("SELECT max(gradeWeightAverage) FROM Employee");
+			} else {
+				query = session.createQuery("SELECT avg(gradeWeightAverage) FROM Employee");
+			}
+			System.out.println(query.list().get(0));
+		} catch(HibernateException he) {
+			if (transaction != null)  {
+				transaction.rollback();
+			}
+			System.out.println("Error occurred");
+			he.printStackTrace();
+		} finally {
+			session.close();
+		}		
+	}
 }
 
 class gwaComparator implements Comparator <Employee> {

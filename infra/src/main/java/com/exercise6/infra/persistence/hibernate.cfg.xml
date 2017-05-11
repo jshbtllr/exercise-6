@@ -14,19 +14,19 @@
 		</property>
 
 		<property name="hibernate.connection.url">
-			jdbc:postgresql://127.0.0.1:5432/v6
+			${hibernate-url}
 		</property>
 
 		<property name="hibernate.connection.username">
-			postgres
+			${hibernate-username}
 		</property>
 
 		<property name="hibernate.connection.password">
-			ex1stgl0bal
+			${hibernate-password}
 		</property>
 
 		<property name="hibernate.show_sql">
-			true
+			${hibernate-show-sql}
 		</property>
 		
 		<mapping resource="com/exercise6/infra/persistence/Employee.hbm.xml"/>

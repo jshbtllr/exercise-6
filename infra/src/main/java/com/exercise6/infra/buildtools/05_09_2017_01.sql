@@ -1,1 +1,1 @@
-CREATE DATABASE v6;
+CREATE DATABASE employeeregistration;

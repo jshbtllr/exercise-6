@@ -10,7 +10,7 @@
 
 	<groupId>com.exercise6.infra</groupId>
 	<artifactId>infra</artifactId>
-	<version>1.0.1</version>
+	<version>${parent-version}</version>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
