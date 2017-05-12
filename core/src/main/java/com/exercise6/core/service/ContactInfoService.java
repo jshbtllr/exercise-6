@@ -1,19 +1,10 @@
 package com.exercise6.core.service;
-import com.exercise6.core.model.Roles;
-import com.exercise6.core.model.Address;
 import com.exercise6.core.model.ContactInfo;
 import com.exercise6.core.model.Employee;
 import com.exercise6.util.InputUtil;
-import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
-import java.util.Scanner;
-import java.util.List;
-import java.util.Date;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 import org.hibernate.SessionFactory;
 
 public class ContactInfoService {

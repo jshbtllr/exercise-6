@@ -1,20 +1,12 @@
 package com.exercise6.core.service;
 import com.exercise6.core.model.Roles;
-import com.exercise6.core.model.Address;
-import com.exercise6.core.model.ContactInfo;
 import com.exercise6.core.model.Employee;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.dao.RoleDAO;
 import com.exercise6.core.dao.EmployeeDAO;
 import com.exercise6.core.service.RoleService;
-import java.util.Scanner;
-import java.util.List;
-import java.util.Date;
 import java.util.Set;
-import java.util.Collections;
-import java.util.Comparator;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
+import java.util.Iterator;
 import org.hibernate.SessionFactory;
 
 public class EmployeeRoleService {
@@ -91,6 +83,7 @@ public class EmployeeRoleService {
 		Roles deleteRole = new Roles(" ", " ");
 		Long roleId = null;
 		Boolean exist = false;
+		Iterator <Roles> iterator = null;
 			
 		System.out.println("Available Roles for Employee: ");
 		for (Roles list : roles) {
@@ -109,13 +102,15 @@ public class EmployeeRoleService {
 			return roles;
 		}
 		deleteRole = RoleDAO.getRoleDetails(sessionFactory, roleId);
-
-		for(Roles list : roles) {
-			if(deleteRole.getId().equals(list.getId())) {
+		
+		iterator = roles.iterator();
+		while(iterator.hasNext()) {
+			if(deleteRole.getId().equals(iterator.next().getId())) {
 				exist = true;
-				roles.remove(list);
+				iterator.remove();
 			}
-		}
+		}		
+
 
 		if(!exist) {
 			System.out.println("Role not assigned to employee");

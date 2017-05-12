@@ -1,5 +1,4 @@
 package com.exercise6.app;
-import java.util.Scanner;
 import com.exercise6.util.InputUtil;
 import com.exercise6.core.service.EmployeeService;
 import com.exercise6.core.service.RoleService;
@@ -197,7 +196,7 @@ public class Application {
 					System.out.println("[1]    Lowest GWA");
 					System.out.println("[2]    Highest GWA");
 					System.out.println("[3]    Average GWA");
-					System.out.println("Choose a function: ");
+					System.out.print("Choose a function: ");
 					Integer option = InputUtil.inputOptionCheck(3);
 					EmployeeDAO.gwaStatistics(sessionFactory, option);
 					break;

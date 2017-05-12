@@ -1,8 +1,5 @@
 package com.exercise6.core.dao;
 
-import com.exercise6.core.model.Roles;
-import com.exercise6.core.model.Address;
-import com.exercise6.core.model.ContactInfo;
 import com.exercise6.core.model.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,7 +9,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import java.util.Date;
 import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,23 +42,23 @@ public class EmployeeDAO {
 		try {
 			transaction = session.beginTransaction();
 			criteria = session.createCriteria(Employee.class);
-			criteria.addOrder(Order.desc("id"));
 
 			if(sort == 1) {
-				criteria.addOrder(Order.asc("lastName"));
-
-				if(order == 2) {
+				if(order == 1) {
+					criteria.addOrder(Order.asc("lastName"));
+				} else {
 					criteria.addOrder(Order.desc("lastName"));
 				}
 			} else if(sort == 3) {
-				criteria.addOrder(Order.asc("hireDate"));
-
-				if(order == 2) {
+				if(order == 1) {
+					criteria.addOrder(Order.asc("hireDate"));
+				} else {
+					System.out.println("Sorts by hiredate desc");
 					criteria.addOrder(Order.desc("hireDate"));
 				}
 			}
 
-			list = criteria.list();
+			list = criteria.list();			
 		} catch(HibernateException he) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -196,10 +192,13 @@ public class EmployeeDAO {
 		try {
 			transaction = session.beginTransaction();
 			if(option == 1) {
+				System.out.print("Minimmum GWA of All Registered employee is ");
 				query = session.createQuery("SELECT min(gradeWeightAverage) FROM Employee");
 			} else if(option == 2) {
+				System.out.print("Maximum GWA of All Registered employee is ");
 				query = session.createQuery("SELECT max(gradeWeightAverage) FROM Employee");
 			} else {
+				System.out.print("Average GWA of All Registered employee is ");
 				query = session.createQuery("SELECT avg(gradeWeightAverage) FROM Employee");
 			}
 			System.out.println(query.list().get(0));

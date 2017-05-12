@@ -42,21 +42,21 @@ public class RoleDAO {
 			transaction = session.beginTransaction();
 
 			if(sortRule == 1) {
-				query = session.createQuery("FROM Roles ORDER BY id");
-				
-				if(orderRule == 2) {
+				if(orderRule == 1) {
+					query = session.createQuery("FROM Roles ORDER BY id");
+				} else {
 					query = session.createQuery("FROM Roles ORDER BY id DESC");
 				}
 			} else if(sortRule == 2) {
-				query = session.createQuery("FROM Roles ORDER BY roleCode");
-
-				if(orderRule == 2) {
+				if(orderRule == 1) {
+					query = session.createQuery("FROM Roles ORDER BY roleCode");
+				} else {
 					query = session.createQuery("FROM Roles ORDER BY roleCode DESC");
 				} 
 			} else if(sortRule == 3) {
-				query = session.createQuery("FROM Roles ORDER BY roleName");
-
-				if(orderRule == 2) {
+				if(orderRule == 1) {
+					query = session.createQuery("FROM Roles ORDER BY roleName");
+				} else {
 					query = session.createQuery("FROM Roles ORDER BY roleName desc");
 				}
 			}

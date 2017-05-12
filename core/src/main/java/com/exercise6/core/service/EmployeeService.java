@@ -80,7 +80,7 @@ public class EmployeeService {
 			}
 		}
 
-		Address address = new Address(streetNumber, barangay, city, zipcode, country);
+		Address address = new Address(streetNumber, barangay, city, country, zipcode);
 		Employee employee = new Employee(lastName, firstName, middleName, suffix, title, address, birthdate, gradeWeightAverage, hireDate, employed, contacts, role);
 
 		do{
